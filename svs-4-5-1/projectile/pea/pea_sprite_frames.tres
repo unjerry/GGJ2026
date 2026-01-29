@@ -1,0 +1,30 @@
+[gd_resource type="SpriteFrames" load_steps=6 format=3 uid="uid://b6amrcdn31b53"]
+
+[ext_resource type="Texture2D" uid="uid://bwnvmf7uodxdt" path="res://assets/blue_gem_fert/0001.png" id="1_us0nx"]
+[ext_resource type="Texture2D" uid="uid://b5r8t84xq7sh1" path="res://assets/blue_gem_fert/0002.png" id="2_arpna"]
+[ext_resource type="Texture2D" uid="uid://chl8pl008ph5o" path="res://assets/blue_gem_fert/0003.png" id="3_xcame"]
+[ext_resource type="Texture2D" uid="uid://jf32sgd11jcg" path="res://assets/blue_gem_fert/0004.png" id="4_pc6k7"]
+[ext_resource type="Texture2D" uid="uid://b0800hpgdiitm" path="res://assets/blue_gem_fert/0005.png" id="5_fkqx4"]
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_us0nx")
+}, {
+"duration": 1.0,
+"texture": ExtResource("2_arpna")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_xcame")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_pc6k7")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_fkqx4")
+}],
+"loop": false,
+"name": &"blue_gem_fert",
+"speed": 6.0
+}]

@@ -1,0 +1,56 @@
+[gd_scene load_steps=9 format=3 uid="uid://sls7oy7oswuo"]
+
+[ext_resource type="Script" uid="uid://b8ltw2xfjd5wb" path="res://system/playground/grid_overlay.gd" id="1_8vnjg"]
+[ext_resource type="PackedScene" uid="uid://dhlkcmno62j5o" path="res://zombie/zombie.tscn" id="1_duj6w"]
+[ext_resource type="Script" uid="uid://c5swdlo10u7gb" path="res://system/playground/hud.gd" id="2_tuib3"]
+[ext_resource type="PackedScene" uid="uid://cfj8p2yhqr0vb" path="res://system/solar_storage/solar_storage.tscn" id="3_solar"]
+[ext_resource type="PackedScene" uid="uid://b6uleijfylka0" path="res://plants/wall/wallnut.tscn" id="4_gwu22"]
+[ext_resource type="PackedScene" uid="uid://cuvvbxb5bokho" path="res://projectile/pea/pea.tscn" id="5_l2c8s"]
+[ext_resource type="PackedScene" uid="uid://s41prna6rcm2" path="res://plants/pea_shooter/pea_shooter.tscn" id="6_tdwk3"]
+[ext_resource type="PackedScene" uid="uid://qg5nnimjvwfs" path="res://projectile/sun/sun.tscn" id="7_c3jux"]
+
+[node name="Playground" type="Node2D"]
+
+[node name="SolarStorage" parent="." instance=ExtResource("3_solar")]
+
+[node name="Camera2D" type="Camera2D" parent="."]
+zoom = Vector2(4, 4)
+
+[node name="GridOverlay" type="Node2D" parent="."]
+script = ExtResource("1_8vnjg")
+
+[node name="HUD" type="CanvasLayer" parent="."]
+script = ExtResource("2_tuib3")
+zombie_path = NodePath("../Zombie")
+
+[node name="Info" type="Label" parent="HUD"]
+offset_right = 40.0
+offset_bottom = 23.0
+
+[node name="Zombie" parent="." instance=ExtResource("1_duj6w")]
+
+[node name="Wallnut" parent="." instance=ExtResource("4_gwu22")]
+position = Vector2(-27, 0)
+
+[node name="Wallnut2" parent="." instance=ExtResource("4_gwu22")]
+position = Vector2(-54, 0)
+
+[node name="Pea3" parent="." instance=ExtResource("5_l2c8s")]
+position = Vector2(-136, 0)
+
+[node name="Pea" parent="." instance=ExtResource("5_l2c8s")]
+position = Vector2(-104, 0)
+
+[node name="Pea2" parent="." instance=ExtResource("5_l2c8s")]
+position = Vector2(-120, 0)
+
+[node name="PeaShooter" parent="." instance=ExtResource("6_tdwk3")]
+position = Vector2(-88, 0)
+
+[node name="Sun" parent="." instance=ExtResource("7_c3jux")]
+position = Vector2(0, -52)
+solar_storage = NodePath("../SolarStorage")
+
+[node name="Sun2" parent="." instance=ExtResource("7_c3jux")]
+position = Vector2(-18, -52)
+solar_storage = NodePath("../SolarStorage")

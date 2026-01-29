@@ -1,0 +1,61 @@
+[gd_scene load_steps=7 format=3 uid="uid://b6uleijfylka0"]
+
+[ext_resource type="Script" uid="uid://cl5tdbo2y8o84" path="res://plants/wall/wallnut.gd" id="1_7mssj"]
+[ext_resource type="SpriteFrames" uid="uid://djmlmhb5l7b7n" path="res://plants/wall/wall_sprite_frames.tres" id="2_nt6vn"]
+[ext_resource type="AnimationNodeStateMachine" uid="uid://ci84111w0x0lk" path="res://plants/wall/wall_state_machine.tres" id="3_xlt0f"]
+
+[sub_resource type="Animation" id="Animation_xlt0f"]
+resource_name = "idle"
+tracks/0/type = "method"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [&"blue_gem_fert", 1.0, false],
+"method": &"play"
+}]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_k5a8r"]
+_data = {
+&"idle": SubResource("Animation_xlt0f")
+}
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_7mssj"]
+
+[node name="Wallnut" type="StaticBody2D"]
+collision_layer = 2
+collision_mask = 0
+script = ExtResource("1_7mssj")
+life = 1200
+
+[node name="Sprite2D" type="AnimatedSprite2D" parent="."]
+texture_filter = 1
+sprite_frames = ExtResource("2_nt6vn")
+animation = &"blue_gem_fert"
+
+[node name="Label" type="Label" parent="."]
+texture_filter = 1
+offset_left = -7.999999
+offset_top = -26.999998
+offset_right = 29.500046
+offset_bottom = -3.999998
+scale = Vector2(0.47999936, 0.6000006)
+text = "hhh"
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_k5a8r")
+}
+
+[node name="AnimationTree" type="AnimationTree" parent="."]
+tree_root = ExtResource("3_xlt0f")
+anim_player = NodePath("../AnimationPlayer")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_7mssj")

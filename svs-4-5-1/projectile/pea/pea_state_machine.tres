@@ -1,0 +1,24 @@
+[gd_resource type="AnimationNodeStateMachine" load_steps=5 format=3 uid="uid://dcgxhx42yej6w"]
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_l25fm"]
+animation = &"fly"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_7oa6x"]
+animation = &"splash"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_5eds5"]
+advance_mode = 2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_r63y3"]
+advance_mode = 2
+advance_expression = "front_probe.is_colliding()"
+
+[resource]
+states/End/position = Vector2(590.5, 185.51563)
+states/Start/position = Vector2(590.5, 100.75)
+states/fly/node = SubResource("AnimationNodeAnimation_l25fm")
+states/fly/position = Vector2(761, 101.875)
+states/splash/node = SubResource("AnimationNodeAnimation_7oa6x")
+states/splash/position = Vector2(760, 231.69531)
+transitions = ["Start", "fly", SubResource("AnimationNodeStateMachineTransition_5eds5"), "fly", "splash", SubResource("AnimationNodeStateMachineTransition_r63y3")]
+graph_offset = Vector2(361, 45)

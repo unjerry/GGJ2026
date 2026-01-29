@@ -1,0 +1,28 @@
+[gd_resource type="AnimationNodeStateMachine" load_steps=6 format=3 uid="uid://dmi4hcyhqip7m"]
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_afh10"]
+animation = &"ascend"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_kyinc"]
+animation = &"attack"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_kyinc"]
+advance_mode = 2
+advance_expression = "front_probe.is_colliding()"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_afh10"]
+advance_mode = 2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_7j0g8"]
+advance_mode = 2
+advance_expression = "!front_probe.is_colliding()"
+
+[resource]
+states/End/position = Vector2(653.5, 106)
+states/Start/position = Vector2(251.5, -25.25)
+states/ascend/node = SubResource("AnimationNodeAnimation_afh10")
+states/ascend/position = Vector2(392.53125, -25.375)
+states/attack/node = SubResource("AnimationNodeAnimation_kyinc")
+states/attack/position = Vector2(392.875, 107.5)
+transitions = ["ascend", "attack", SubResource("AnimationNodeStateMachineTransition_kyinc"), "Start", "ascend", SubResource("AnimationNodeStateMachineTransition_afh10"), "attack", "ascend", SubResource("AnimationNodeStateMachineTransition_7j0g8")]
+graph_offset = Vector2(-24, -69)

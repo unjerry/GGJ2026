@@ -1,0 +1,14 @@
+[gd_resource type="AnimationNodeStateMachine" load_steps=3 format=3 uid="uid://ci84111w0x0lk"]
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_ahuqe"]
+animation = &"idle"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_j4ed6"]
+advance_mode = 2
+
+[resource]
+states/End/position = Vector2(199.375, 184.5)
+states/idle/node = SubResource("AnimationNodeAnimation_ahuqe")
+states/idle/position = Vector2(347.5, 100.5)
+transitions = ["Start", "idle", SubResource("AnimationNodeStateMachineTransition_j4ed6")]
+graph_offset = Vector2(5, 24)

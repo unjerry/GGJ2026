@@ -1,0 +1,109 @@
+[gd_scene load_steps=9 format=3 uid="uid://s41prna6rcm2"]
+
+[ext_resource type="SpriteFrames" uid="uid://bd8vamub307re" path="res://plants/pea_shooter/pea_shooter_sprite_frames.tres" id="1_2rev8"]
+[ext_resource type="Script" uid="uid://bc0nopwllwpgr" path="res://plants/pea_shooter/pea_shooter.gd" id="1_03p7j"]
+[ext_resource type="AnimationNodeStateMachine" uid="uid://c033mviay55nl" path="res://plants/pea_shooter/pea_shooter_state_machine.tres" id="2_1yeiv"]
+[ext_resource type="PackedScene" uid="uid://cuvvbxb5bokho" path="res://projectile/pea/pea.tscn" id="2_g60ni"]
+
+[sub_resource type="Animation" id="Animation_03p7j"]
+resource_name = "idle"
+loop_mode = 1
+tracks/0/type = "method"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("AnimatedSprite2D")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [&"idle", 1.0, false],
+"method": &"play"
+}]
+}
+
+[sub_resource type="Animation" id="Animation_g60ni"]
+resource_name = "shoot"
+loop_mode = 1
+tracks/0/type = "method"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("AnimatedSprite2D")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [&"nefer_attack", 1.0, false],
+"method": &"play"
+}]
+}
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"shoot"
+}]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_g60ni"]
+_data = {
+&"idle": SubResource("Animation_03p7j"),
+&"shoot": SubResource("Animation_g60ni")
+}
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_2rev8"]
+radius = 4.0
+height = 24.0
+
+[node name="PeaShooter" type="StaticBody2D"]
+script = ExtResource("1_03p7j")
+pea_scene = ExtResource("2_g60ni")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+texture_filter = 1
+scale = Vector2(0.5, 0.5)
+sprite_frames = ExtResource("1_2rev8")
+animation = &"nefer_attack"
+frame = 19
+frame_progress = 1.0
+flip_h = true
+
+[node name="Label" type="Label" parent="."]
+texture_filter = 1
+offset_left = -7.0
+offset_top = -24.0
+offset_right = 31.0
+offset_bottom = -1.0
+scale = Vector2(0.5, 0.5)
+size_flags_horizontal = 4
+text = "300h"
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_g60ni")
+}
+
+[node name="AnimationTree" type="AnimationTree" parent="."]
+tree_root = ExtResource("2_1yeiv")
+advance_expression_base_node = NodePath("..")
+anim_player = NodePath("../AnimationPlayer")
+
+[node name="shoot_point" type="Marker2D" parent="."]
+position = Vector2(8, -5)
+
+[node name="FrontProbe" type="RayCast2D" parent="."]
+target_position = Vector2(128, 0)
+collision_mask = 4
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CapsuleShape2D_2rev8")

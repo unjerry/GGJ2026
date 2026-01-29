@@ -1,0 +1,208 @@
+[gd_resource type="SpriteFrames" load_steps=48 format=3 uid="uid://2qrlh6gimpwy"]
+
+[ext_resource type="Texture2D" uid="uid://bwnvmf7uodxdt" path="res://assets/blue_gem_fert/0001.png" id="1_dvs3p"]
+[ext_resource type="Texture2D" uid="uid://b5r8t84xq7sh1" path="res://assets/blue_gem_fert/0002.png" id="2_3lcty"]
+[ext_resource type="Texture2D" uid="uid://chl8pl008ph5o" path="res://assets/blue_gem_fert/0003.png" id="3_pbseg"]
+[ext_resource type="Texture2D" uid="uid://jf32sgd11jcg" path="res://assets/blue_gem_fert/0004.png" id="4_tsk5p"]
+[ext_resource type="Texture2D" uid="uid://b0800hpgdiitm" path="res://assets/blue_gem_fert/0005.png" id="5_t3esy"]
+[ext_resource type="Texture2D" uid="uid://b37elwi3o0juw" path="res://assets/nefer_attack/0001.png" id="6_m0o3k"]
+[ext_resource type="Texture2D" uid="uid://5gknchupc2co" path="res://assets/nefer_walk/0001.png" id="6_vvbx6"]
+[ext_resource type="Texture2D" uid="uid://bvw2ju2hnu3me" path="res://assets/nefer_walk/0002.png" id="7_q77tc"]
+[ext_resource type="Texture2D" uid="uid://bbe3wu66mromf" path="res://assets/nefer_attack/0002.png" id="7_s1lon"]
+[ext_resource type="Texture2D" uid="uid://c854rxgqnlkb0" path="res://assets/nefer_attack/0003.png" id="8_8vruq"]
+[ext_resource type="Texture2D" uid="uid://bo4kbg7cw6ej6" path="res://assets/nefer_walk/0003.png" id="8_l5djd"]
+[ext_resource type="Texture2D" uid="uid://dawmk1om2x4qq" path="res://assets/nefer_walk/0004.png" id="9_3wvsg"]
+[ext_resource type="Texture2D" uid="uid://dotw1qa5l7jey" path="res://assets/nefer_attack/0004.png" id="9_e54gr"]
+[ext_resource type="Texture2D" uid="uid://bqvm6b37i2mmp" path="res://assets/nefer_walk/0005.png" id="10_g0jv3"]
+[ext_resource type="Texture2D" uid="uid://c7ifi7b3xn6rl" path="res://assets/nefer_attack/0005.png" id="10_m2i5c"]
+[ext_resource type="Texture2D" uid="uid://bt4vgsvulwila" path="res://assets/nefer_walk/0006.png" id="11_3344y"]
+[ext_resource type="Texture2D" uid="uid://dvj771r4ae1fq" path="res://assets/nefer_attack/0006.png" id="11_ckwd0"]
+[ext_resource type="Texture2D" uid="uid://divvqi2ws5u8" path="res://assets/nefer_walk/0007.png" id="12_8ea5p"]
+[ext_resource type="Texture2D" uid="uid://hd6duv4ahpxu" path="res://assets/nefer_attack/0007.png" id="12_33oxd"]
+[ext_resource type="Texture2D" uid="uid://d05mthch8ctgl" path="res://assets/nefer_attack/0008.png" id="13_7yfmx"]
+[ext_resource type="Texture2D" uid="uid://cm01e8nrne0bk" path="res://assets/nefer_walk/0008.png" id="13_felgr"]
+[ext_resource type="Texture2D" uid="uid://b6jmdkkerebiu" path="res://assets/nefer_walk/0009.png" id="14_a47ib"]
+[ext_resource type="Texture2D" uid="uid://dyfaa015pmhwk" path="res://assets/nefer_attack/0009.png" id="14_xoprc"]
+[ext_resource type="Texture2D" uid="uid://dnvejpikpowas" path="res://assets/nefer_walk/0010.png" id="15_4drch"]
+[ext_resource type="Texture2D" uid="uid://xwpv6iab8v34" path="res://assets/nefer_attack/0010.png" id="15_sbbuy"]
+[ext_resource type="Texture2D" uid="uid://dlh3jmdg3bi8v" path="res://assets/nefer_attack/0011.png" id="16_4ypp5"]
+[ext_resource type="Texture2D" uid="uid://b1sxyn324nxj8" path="res://assets/nefer_walk/0011.png" id="16_25kbj"]
+[ext_resource type="Texture2D" uid="uid://bnoaiqkmcepxd" path="res://assets/nefer_attack/0012.png" id="17_23cko"]
+[ext_resource type="Texture2D" uid="uid://c7bl6a73hgy28" path="res://assets/nefer_walk/0012.png" id="17_m0o3k"]
+[ext_resource type="Texture2D" uid="uid://mn2jx628d0rw" path="res://assets/nefer_attack/0013.png" id="18_dkfo3"]
+[ext_resource type="Texture2D" uid="uid://qc38vsko5xkh" path="res://assets/nefer_walk/0013.png" id="18_s1lon"]
+[ext_resource type="Texture2D" uid="uid://cvx6s42opvwe6" path="res://assets/nefer_walk/0014.png" id="19_8vruq"]
+[ext_resource type="Texture2D" uid="uid://nmfe7gag6h83" path="res://assets/nefer_attack/0014.png" id="19_vfun1"]
+[ext_resource type="Texture2D" uid="uid://bmiwdtlmxhe83" path="res://assets/nefer_attack/0015.png" id="20_06gtn"]
+[ext_resource type="Texture2D" uid="uid://b56n6e5c8vynx" path="res://assets/nefer_walk/0015.png" id="20_e54gr"]
+[ext_resource type="Texture2D" uid="uid://pg5wnnweb3aa" path="res://assets/nefer_attack/0016.png" id="21_3qw24"]
+[ext_resource type="Texture2D" uid="uid://beymvlrddueci" path="res://assets/nefer_walk/0016.png" id="21_m2i5c"]
+[ext_resource type="Texture2D" uid="uid://crpfop1cj8v8a" path="res://assets/nefer_attack/0017.png" id="22_b2kyw"]
+[ext_resource type="Texture2D" uid="uid://ea0wqsxmyp3f" path="res://assets/nefer_walk/0017.png" id="22_ckwd0"]
+[ext_resource type="Texture2D" uid="uid://djtepcrjlmgko" path="res://assets/nefer_walk/0018.png" id="23_33oxd"]
+[ext_resource type="Texture2D" uid="uid://ybm77gidcokd" path="res://assets/nefer_attack/0018.png" id="23_j3tek"]
+[ext_resource type="Texture2D" uid="uid://c5kp864lkknu3" path="res://assets/nefer_walk/0019.png" id="24_7yfmx"]
+[ext_resource type="Texture2D" uid="uid://bgtpuq0oow6nc" path="res://assets/nefer_attack/0019.png" id="24_08bh6"]
+[ext_resource type="Texture2D" uid="uid://btgkb72kdo70h" path="res://assets/nefer_attack/0020.png" id="25_jnnya"]
+[ext_resource type="Texture2D" uid="uid://dqnaeea8ilpgk" path="res://assets/nefer_walk/0020.png" id="25_xoprc"]
+[ext_resource type="Texture2D" uid="uid://50ek5mc5st0d" path="res://assets/nefer_walk/0021.png" id="26_sbbuy"]
+[ext_resource type="Texture2D" uid="uid://c454pocevgbbc" path="res://assets/nefer_walk/0022.png" id="27_4ypp5"]
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_dvs3p")
+}, {
+"duration": 1.0,
+"texture": ExtResource("2_3lcty")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_pbseg")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_tsk5p")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_t3esy")
+}],
+"loop": true,
+"name": &"blue_gem_fert",
+"speed": 6.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("6_m0o3k")
+}, {
+"duration": 1.0,
+"texture": ExtResource("7_s1lon")
+}, {
+"duration": 1.0,
+"texture": ExtResource("8_8vruq")
+}, {
+"duration": 1.0,
+"texture": ExtResource("9_e54gr")
+}, {
+"duration": 1.0,
+"texture": ExtResource("10_m2i5c")
+}, {
+"duration": 1.0,
+"texture": ExtResource("11_ckwd0")
+}, {
+"duration": 1.0,
+"texture": ExtResource("12_33oxd")
+}, {
+"duration": 1.0,
+"texture": ExtResource("13_7yfmx")
+}, {
+"duration": 1.0,
+"texture": ExtResource("14_xoprc")
+}, {
+"duration": 1.0,
+"texture": ExtResource("15_sbbuy")
+}, {
+"duration": 1.0,
+"texture": ExtResource("16_4ypp5")
+}, {
+"duration": 1.0,
+"texture": ExtResource("17_23cko")
+}, {
+"duration": 1.0,
+"texture": ExtResource("18_dkfo3")
+}, {
+"duration": 1.0,
+"texture": ExtResource("19_vfun1")
+}, {
+"duration": 1.0,
+"texture": ExtResource("20_06gtn")
+}, {
+"duration": 1.0,
+"texture": ExtResource("21_3qw24")
+}, {
+"duration": 1.0,
+"texture": ExtResource("22_b2kyw")
+}, {
+"duration": 1.0,
+"texture": ExtResource("23_j3tek")
+}, {
+"duration": 1.0,
+"texture": ExtResource("24_08bh6")
+}, {
+"duration": 1.0,
+"texture": ExtResource("25_jnnya")
+}],
+"loop": false,
+"name": &"nefer_attack",
+"speed": 6.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("6_vvbx6")
+}, {
+"duration": 1.0,
+"texture": ExtResource("7_q77tc")
+}, {
+"duration": 1.0,
+"texture": ExtResource("8_l5djd")
+}, {
+"duration": 1.0,
+"texture": ExtResource("9_3wvsg")
+}, {
+"duration": 1.0,
+"texture": ExtResource("10_g0jv3")
+}, {
+"duration": 1.0,
+"texture": ExtResource("11_3344y")
+}, {
+"duration": 1.0,
+"texture": ExtResource("12_8ea5p")
+}, {
+"duration": 1.0,
+"texture": ExtResource("13_felgr")
+}, {
+"duration": 1.0,
+"texture": ExtResource("14_a47ib")
+}, {
+"duration": 1.0,
+"texture": ExtResource("15_4drch")
+}, {
+"duration": 1.0,
+"texture": ExtResource("16_25kbj")
+}, {
+"duration": 1.0,
+"texture": ExtResource("17_m0o3k")
+}, {
+"duration": 1.0,
+"texture": ExtResource("18_s1lon")
+}, {
+"duration": 1.0,
+"texture": ExtResource("19_8vruq")
+}, {
+"duration": 1.0,
+"texture": ExtResource("20_e54gr")
+}, {
+"duration": 1.0,
+"texture": ExtResource("21_m2i5c")
+}, {
+"duration": 1.0,
+"texture": ExtResource("22_ckwd0")
+}, {
+"duration": 1.0,
+"texture": ExtResource("23_33oxd")
+}, {
+"duration": 1.0,
+"texture": ExtResource("24_7yfmx")
+}, {
+"duration": 1.0,
+"texture": ExtResource("25_xoprc")
+}, {
+"duration": 1.0,
+"texture": ExtResource("26_sbbuy")
+}, {
+"duration": 1.0,
+"texture": ExtResource("27_4ypp5")
+}],
+"loop": false,
+"name": &"nefer_walk",
+"speed": 6.0
+}]

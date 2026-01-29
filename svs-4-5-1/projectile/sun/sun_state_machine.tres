@@ -1,0 +1,24 @@
+[gd_resource type="AnimationNodeStateMachine" load_steps=5 format=3 uid="uid://dkcd2hueqs3ge"]
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_13n15"]
+animation = &"collect"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_gpycc"]
+animation = &"idle"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_13n15"]
+advance_mode = 2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_cphir"]
+advance_mode = 2
+advance_expression = "is_collecting"
+
+[resource]
+states/End/position = Vector2(349.5, 216.46875)
+states/Start/position = Vector2(350, 100)
+states/collect/node = SubResource("AnimationNodeAnimation_13n15")
+states/collect/position = Vector2(728, 99.9375)
+states/idle/node = SubResource("AnimationNodeAnimation_gpycc")
+states/idle/position = Vector2(529.5, 99.5)
+transitions = ["Start", "idle", SubResource("AnimationNodeStateMachineTransition_13n15"), "idle", "collect", SubResource("AnimationNodeStateMachineTransition_cphir")]
+graph_offset = Vector2(245, 18)

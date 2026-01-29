@@ -1,0 +1,17 @@
+[gd_resource type="SpriteFrames" load_steps=2 format=3 uid="uid://tgg50rqhsnwj"]
+
+[ext_resource type="Texture2D" uid="uid://c36unqqy3mi7e" path="res://assets/red_gem.png" id="1_lry4t"]
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_lry4t")
+}, {
+"duration": 1.0,
+"texture": ExtResource("1_lry4t")
+}],
+"loop": false,
+"name": &"idled",
+"speed": 5.0
+}]

@@ -1,0 +1,27 @@
+[gd_resource type="AnimationNodeStateMachine" load_steps=6 format=3 uid="uid://c033mviay55nl"]
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_n8pu0"]
+animation = &"idle"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_v64pj"]
+animation = &"shoot"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_v64pj"]
+advance_mode = 2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_0wqmi"]
+advance_mode = 2
+advance_expression = "front_probe.is_colliding()"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_n8pu0"]
+advance_mode = 2
+advance_expression = "!front_probe.is_colliding()"
+
+[resource]
+states/End/position = Vector2(199.5, 210.375)
+states/idle/node = SubResource("AnimationNodeAnimation_n8pu0")
+states/idle/position = Vector2(375, 100.5)
+states/shoot/node = SubResource("AnimationNodeAnimation_v64pj")
+states/shoot/position = Vector2(374.25, 212)
+transitions = ["Start", "idle", SubResource("AnimationNodeStateMachineTransition_v64pj"), "idle", "shoot", SubResource("AnimationNodeStateMachineTransition_0wqmi"), "shoot", "idle", SubResource("AnimationNodeStateMachineTransition_n8pu0")]
+graph_offset = Vector2(-110, 22)
