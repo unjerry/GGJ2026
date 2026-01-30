@@ -3,7 +3,11 @@ extends Control
 ## testt.tscn 的测试脚本
 ## 加载 JSON 数据并动态创建任务行
 
-@export_file("*.json") var tasks_json_path: String = "res://data/tasks.json"
+# 内置配置文件路径（打包在游戏内）
+const BUILTIN_JSON_PATH: String = "res://data/tasks.json"
+
+# 外部配置文件相对路径（相对于 exe）
+const EXTERNAL_JSON_RELATIVE_PATH: String = "data/tasks.json"
 
 # 引用 row 场景
 var row_scene: PackedScene = preload("res://system/tess/row/row.tscn")
@@ -13,6 +17,9 @@ var row_scene: PackedScene = preload("res://system/tess/row/row.tscn")
 
 # 存储已创建的行
 var task_rows: Array = []
+
+# 实际使用的 JSON 路径
+var active_json_path: String = ""
 
 func _ready() -> void:
 	# 清除现有的示例行（HBoxContainer, HBoxContainer2, HBoxContainer3）
@@ -38,15 +45,67 @@ func load_and_display_tasks() -> void:
 
 	create_task_rows(tasks_data)
 
+## 获取外部配置文件的完整路径（exe 同目录）
+func get_external_json_path() -> String:
+	var exe_path = OS.get_executable_path()
+	var exe_dir = exe_path.get_base_dir()
+	return exe_dir.path_join(EXTERNAL_JSON_RELATIVE_PATH)
+
+## 确保外部配置文件存在（首次运行时复制）
+func ensure_external_config_exists() -> void:
+	var external_path = get_external_json_path()
+
+	# 如果外部文件已存在，不需要复制
+	if FileAccess.file_exists(external_path):
+		return
+
+	# 创建 data 目录
+	var external_dir = external_path.get_base_dir()
+	if not DirAccess.dir_exists_absolute(external_dir):
+		var err = DirAccess.make_dir_recursive_absolute(external_dir)
+		if err != OK:
+			push_error("无法创建目录: " + external_dir)
+			return
+
+	# 从内置文件复制到外部
+	if FileAccess.file_exists(BUILTIN_JSON_PATH):
+		var source_file = FileAccess.open(BUILTIN_JSON_PATH, FileAccess.READ)
+		if source_file:
+			var content = source_file.get_as_text()
+			source_file.close()
+
+			var dest_file = FileAccess.open(external_path, FileAccess.WRITE)
+			if dest_file:
+				dest_file.store_string(content)
+				dest_file.close()
+				print("📄 首次运行：已复制配置文件到 ", external_path)
+			else:
+				push_error("无法写入外部配置文件: " + external_path)
+
 ## 从 JSON 加载任务数据
 func load_tasks_from_json() -> Array:
-	if not FileAccess.file_exists(tasks_json_path):
-		push_error("JSON文件不存在: " + tasks_json_path)
+	var external_path = get_external_json_path()
+
+	# 优先使用外部配置文件（exe 同目录）
+	if FileAccess.file_exists(external_path):
+		active_json_path = external_path
+		print("📂 从外部配置加载: ", external_path)
+	else:
+		# 外部文件不存在，尝试从内置加载
+		active_json_path = BUILTIN_JSON_PATH
+		print("📦 从内置配置加载: ", BUILTIN_JSON_PATH)
+
+		# 首次运行，复制配置文件到外部
+		ensure_external_config_exists()
+
+	# 检查文件是否存在
+	if not FileAccess.file_exists(active_json_path):
+		push_error("JSON文件不存在: " + active_json_path)
 		return []
 
-	var file = FileAccess.open(tasks_json_path, FileAccess.READ)
+	var file = FileAccess.open(active_json_path, FileAccess.READ)
 	if file == null:
-		push_error("无法打开文件: " + tasks_json_path)
+		push_error("无法打开文件: " + active_json_path)
 		return []
 
 	var json_string = file.get_as_text()
