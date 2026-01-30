@@ -1,0 +1,56 @@
+{
+  "version": "1.0",
+  "last_updated": "2026-01-30",
+  "tasks": [
+    {
+      "id": "001",
+      "name": "巡逻边境",
+      "faction": "帝国",
+      "type": "护送",
+      "difficulty": "简单",
+      "reward": "100",
+      "duration": "15分钟",
+      "status": "可接取"
+    },
+    {
+      "id": "002",
+      "name": "矿物采集",
+      "faction": "联邦",
+      "type": "收集",
+      "difficulty": "中等",
+      "reward": "250",
+      "duration": "30分钟",
+      "status": "进行中"
+    },
+    {
+      "id": "003",
+      "name": "剿灭海盗",
+      "faction": "独立",
+      "type": "战斗",
+      "difficulty": "困难",
+      "reward": "500",
+      "duration": "45分钟",
+      "status": "已完成"
+    },
+    {
+      "id": "004",
+      "name": "外交任务",
+      "faction": "中立",
+      "type": "谈判",
+      "difficulty": "中等",
+      "reward": "300",
+      "duration": "20分钟",
+      "status": "可接取"
+    },
+    {
+      "id": "005",
+      "name": "紧急救援",
+      "faction": "帝国",
+      "type": "救援",
+      "difficulty": "困难",
+      "reward": "600",
+      "duration": "60分钟",
+      "status": "锁定"
+    }
+  ]
+}
