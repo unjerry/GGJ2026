@@ -19,7 +19,10 @@ config/icon="uid://c36unqqy3mi7e"
 
 window/size/viewport_width=1280
 window/size/viewport_height=720
-window/stretch/mode="canvas_items"
+
+[gui]
+
+theme/default_font_multichannel_signed_distance_field=true
 
 [layer_names]
 

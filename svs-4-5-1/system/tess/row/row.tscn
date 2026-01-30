@@ -1,0 +1,54 @@
+[gd_scene load_steps=2 format=3 uid="uid://crhvyptcysura"]
+
+[ext_resource type="Script" uid="uid://c84u4i4s1gtvu" path="res://system/tess/row/row.gd" id="1_es1cc"]
+
+[node name="HBoxContainer3" type="HBoxContainer"]
+script = ExtResource("1_es1cc")
+
+[node name="Label2" type="Label" parent="."]
+custom_minimum_size = Vector2(50, 0)
+layout_mode = 2
+size_flags_vertical = 1
+text = "编号"
+
+[node name="Label3" type="Label" parent="."]
+custom_minimum_size = Vector2(50, 0)
+layout_mode = 2
+size_flags_vertical = 1
+text = "名称"
+
+[node name="Label" type="Label" parent="."]
+custom_minimum_size = Vector2(50, 0)
+layout_mode = 2
+size_flags_vertical = 1
+text = "势力"
+
+[node name="Label4" type="Label" parent="."]
+custom_minimum_size = Vector2(50, 0)
+layout_mode = 2
+size_flags_vertical = 1
+text = "类型"
+
+[node name="Label5" type="Label" parent="."]
+custom_minimum_size = Vector2(50, 0)
+layout_mode = 2
+size_flags_vertical = 1
+text = "难度"
+
+[node name="Label6" type="Label" parent="."]
+custom_minimum_size = Vector2(50, 0)
+layout_mode = 2
+size_flags_vertical = 1
+text = "能量硬币报酬"
+
+[node name="Label7" type="Label" parent="."]
+custom_minimum_size = Vector2(50, 0)
+layout_mode = 2
+size_flags_vertical = 1
+text = "预计时长"
+
+[node name="Label8" type="Label" parent="."]
+custom_minimum_size = Vector2(50, 0)
+layout_mode = 2
+size_flags_vertical = 1
+text = "状态"
