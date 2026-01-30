@@ -13,7 +13,7 @@ const EXTERNAL_JSON_RELATIVE_PATH: String = "data/tasks.json"
 var row_scene: PackedScene = preload("res://system/tess/row/row.tscn")
 
 # 容器引用
-@onready var rows_container: VBoxContainer = $Control/Panel/ScrollContainer/VBoxContainer
+@onready var rows_container: VBoxContainer = $Control/VBoxContainer/Panel/ScrollContainer/VBoxContainer
 
 # 存储已创建的行
 var task_rows: Array = []

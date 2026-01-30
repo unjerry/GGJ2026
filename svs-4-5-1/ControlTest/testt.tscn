@@ -26,7 +26,7 @@ offset_bottom = 0.23999023
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="Panel" type="Panel" parent="Control"]
+[node name="VBoxContainer" type="VBoxContainer" parent="Control"]
 layout_mode = 1
 anchors_preset = -1
 anchor_right = 1.0
@@ -38,7 +38,25 @@ offset_bottom = -10.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="ScrollContainer" type="ScrollContainer" parent="Control/Panel"]
+[node name="Panel2" type="Panel" parent="Control/VBoxContainer"]
+custom_minimum_size = Vector2(0, 41.875)
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Control/VBoxContainer/Panel2"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "任务"
+
+[node name="Panel" type="Panel" parent="Control/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+size_flags_stretch_ratio = 5.0
+
+[node name="ScrollContainer" type="ScrollContainer" parent="Control/VBoxContainer/Panel"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -46,64 +64,64 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Control/Panel/ScrollContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="Control/VBoxContainer/Panel/ScrollContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="HBoxContainer" type="HBoxContainer" parent="Control/Panel/ScrollContainer/VBoxContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="Control/VBoxContainer/Panel/ScrollContainer/VBoxContainer"]
 layout_mode = 2
 
-[node name="Label2" type="Label" parent="Control/Panel/ScrollContainer/VBoxContainer/HBoxContainer"]
+[node name="Label2" type="Label" parent="Control/VBoxContainer/Panel/ScrollContainer/VBoxContainer/HBoxContainer"]
 custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 1
 text = "编号"
 
-[node name="Label3" type="Label" parent="Control/Panel/ScrollContainer/VBoxContainer/HBoxContainer"]
+[node name="Label3" type="Label" parent="Control/VBoxContainer/Panel/ScrollContainer/VBoxContainer/HBoxContainer"]
 custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 1
 text = "名称"
 
-[node name="Label" type="Label" parent="Control/Panel/ScrollContainer/VBoxContainer/HBoxContainer"]
+[node name="Label" type="Label" parent="Control/VBoxContainer/Panel/ScrollContainer/VBoxContainer/HBoxContainer"]
 custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 1
 text = "势力"
 
-[node name="Label4" type="Label" parent="Control/Panel/ScrollContainer/VBoxContainer/HBoxContainer"]
+[node name="Label4" type="Label" parent="Control/VBoxContainer/Panel/ScrollContainer/VBoxContainer/HBoxContainer"]
 custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 1
 text = "类型"
 
-[node name="Label5" type="Label" parent="Control/Panel/ScrollContainer/VBoxContainer/HBoxContainer"]
+[node name="Label5" type="Label" parent="Control/VBoxContainer/Panel/ScrollContainer/VBoxContainer/HBoxContainer"]
 custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 1
 text = "难度"
 
-[node name="Label6" type="Label" parent="Control/Panel/ScrollContainer/VBoxContainer/HBoxContainer"]
+[node name="Label6" type="Label" parent="Control/VBoxContainer/Panel/ScrollContainer/VBoxContainer/HBoxContainer"]
 custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 1
 text = "能量硬币报酬"
 
-[node name="Label7" type="Label" parent="Control/Panel/ScrollContainer/VBoxContainer/HBoxContainer"]
+[node name="Label7" type="Label" parent="Control/VBoxContainer/Panel/ScrollContainer/VBoxContainer/HBoxContainer"]
 custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 1
 text = "预计时长"
 
-[node name="Label8" type="Label" parent="Control/Panel/ScrollContainer/VBoxContainer/HBoxContainer"]
+[node name="Label8" type="Label" parent="Control/VBoxContainer/Panel/ScrollContainer/VBoxContainer/HBoxContainer"]
 custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
 size_flags_horizontal = 3
@@ -121,7 +139,7 @@ offset_bottom = 0.19998169
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="Panel" type="Panel" parent="Control2"]
+[node name="VBoxContainer" type="VBoxContainer" parent="Control2"]
 layout_mode = 1
 anchors_preset = -1
 anchor_right = 1.0
@@ -132,6 +150,92 @@ offset_right = -10.0
 offset_bottom = -10.0
 grow_horizontal = 2
 grow_vertical = 2
+
+[node name="Panel2" type="Panel" parent="Control2/VBoxContainer"]
+custom_minimum_size = Vector2(0, 41.875)
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Control2/VBoxContainer/Panel2"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "资源"
+
+[node name="Panel" type="Panel" parent="Control2/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="ScrollContainer" type="ScrollContainer" parent="Control2/VBoxContainer/Panel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Control2/VBoxContainer/Panel/ScrollContainer"]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Control2/VBoxContainer/Panel/ScrollContainer/HBoxContainer"]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Control2/VBoxContainer/Panel/ScrollContainer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+text = "资源"
+
+[node name="Label2" type="Label" parent="Control2/VBoxContainer/Panel/ScrollContainer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+text = "资源名称"
+
+[node name="Label3" type="Label" parent="Control2/VBoxContainer/Panel/ScrollContainer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+text = "资源介绍"
+
+[node name="Label4" type="Label" parent="Control2/VBoxContainer/Panel/ScrollContainer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+text = "产出地"
+
+[node name="Label5" type="Label" parent="Control2/VBoxContainer/Panel/ScrollContainer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+text = "用途"
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="Control2/VBoxContainer/Panel/ScrollContainer/HBoxContainer"]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Control2/VBoxContainer/Panel/ScrollContainer/HBoxContainer/VBoxContainer2"]
+layout_mode = 2
+size_flags_vertical = 3
+text = "资源1"
+
+[node name="Label2" type="Label" parent="Control2/VBoxContainer/Panel/ScrollContainer/HBoxContainer/VBoxContainer2"]
+layout_mode = 2
+size_flags_vertical = 3
+text = "木材"
+
+[node name="Label3" type="Label" parent="Control2/VBoxContainer/Panel/ScrollContainer/HBoxContainer/VBoxContainer2"]
+layout_mode = 2
+size_flags_vertical = 3
+text = "是木头"
+
+[node name="Label4" type="Label" parent="Control2/VBoxContainer/Panel/ScrollContainer/HBoxContainer/VBoxContainer2"]
+layout_mode = 2
+size_flags_vertical = 3
+text = "哪都有吧"
+
+[node name="Label5" type="Label" parent="Control2/VBoxContainer/Panel/ScrollContainer/HBoxContainer/VBoxContainer2"]
+layout_mode = 2
+size_flags_vertical = 3
+text = "基础材料"
 
 [node name="Control3" type="Control" parent="."]
 layout_mode = 1
@@ -143,7 +247,7 @@ offset_right = -0.2000122
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="Panel" type="Panel" parent="Control3"]
+[node name="VBoxContainer" type="VBoxContainer" parent="Control3"]
 layout_mode = 1
 anchors_preset = -1
 anchor_right = 1.0
@@ -154,6 +258,74 @@ offset_right = -10.0
 offset_bottom = -10.0
 grow_horizontal = 2
 grow_vertical = 2
+
+[node name="Panel2" type="Panel" parent="Control3/VBoxContainer"]
+custom_minimum_size = Vector2(0, 41.875)
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Control3/VBoxContainer/Panel2"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "冒险家"
+
+[node name="Panel" type="Panel" parent="Control3/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="ScrollContainer" type="ScrollContainer" parent="Control3/VBoxContainer/Panel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Control3/VBoxContainer/Panel/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Control3/VBoxContainer/Panel/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label2" type="Label" parent="Control3/VBoxContainer/Panel/ScrollContainer/VBoxContainer/HBoxContainer"]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
+text = "编号"
+
+[node name="Label3" type="Label" parent="Control3/VBoxContainer/Panel/ScrollContainer/VBoxContainer/HBoxContainer"]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
+text = "冒险家名称"
+
+[node name="Label" type="Label" parent="Control3/VBoxContainer/Panel/ScrollContainer/VBoxContainer/HBoxContainer"]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
+text = "势力"
+
+[node name="Label4" type="Label" parent="Control3/VBoxContainer/Panel/ScrollContainer/VBoxContainer/HBoxContainer"]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
+text = "类型"
+
+[node name="Label6" type="Label" parent="Control3/VBoxContainer/Panel/ScrollContainer/VBoxContainer/HBoxContainer"]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
+text = "能力值"
 
 [node name="Control4" type="Control" parent="."]
 layout_mode = 1
@@ -164,7 +336,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="Panel" type="Panel" parent="Control4"]
+[node name="VBoxContainer" type="VBoxContainer" parent="Control4"]
 layout_mode = 1
 anchors_preset = -1
 anchor_right = 1.0
@@ -175,3 +347,54 @@ offset_right = -10.0
 offset_bottom = -10.0
 grow_horizontal = 2
 grow_vertical = 2
+
+[node name="Panel2" type="Panel" parent="Control4/VBoxContainer"]
+custom_minimum_size = Vector2(0, 41.875)
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Control4/VBoxContainer/Panel2"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "协会"
+
+[node name="Panel" type="Panel" parent="Control4/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="ScrollContainer" type="ScrollContainer" parent="Control4/VBoxContainer/Panel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Control4/VBoxContainer/Panel/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Control4/VBoxContainer/Panel/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label2" type="Label" parent="Control4/VBoxContainer/Panel/ScrollContainer/VBoxContainer/HBoxContainer"]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
+text = "协会等级"
+
+[node name="Label3" type="Label" parent="Control4/VBoxContainer/Panel/ScrollContainer/VBoxContainer/HBoxContainer"]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
+text = "下一级所需材料"
+
+[node name="Button" type="Button" parent="Control4/VBoxContainer/Panel/ScrollContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+text = "升级"
