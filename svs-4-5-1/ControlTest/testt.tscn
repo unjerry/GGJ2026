@@ -1,4 +1,6 @@
-[gd_scene format=3 uid="uid://b4nxfyhc5akri"]
+[gd_scene load_steps=2 format=3 uid="uid://b4nxfyhc5akri"]
+
+[ext_resource type="Script" uid="uid://bb0a2k1y6kuwu" path="res://ControlTest/testt.gd" id="1_testt"]
 
 [node name="Control" type="Control"]
 layout_mode = 3
@@ -11,6 +13,7 @@ offset_right = -100.0
 offset_bottom = -100.0
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("1_testt")
 
 [node name="Control" type="Control" parent="."]
 layout_mode = 1
@@ -62,89 +65,41 @@ text = "名称"
 [node name="Label" type="Label" parent="Control/Panel/VBoxContainer/HBoxContainer"]
 custom_minimum_size = Vector2(50, 0)
 layout_mode = 2
+size_flags_horizontal = 3
 size_flags_vertical = 1
 text = "势力"
 
 [node name="Label4" type="Label" parent="Control/Panel/VBoxContainer/HBoxContainer"]
 custom_minimum_size = Vector2(50, 0)
 layout_mode = 2
+size_flags_horizontal = 3
 size_flags_vertical = 1
 text = "类型"
 
 [node name="Label5" type="Label" parent="Control/Panel/VBoxContainer/HBoxContainer"]
 custom_minimum_size = Vector2(50, 0)
 layout_mode = 2
+size_flags_horizontal = 3
 size_flags_vertical = 1
 text = "难度"
 
 [node name="Label6" type="Label" parent="Control/Panel/VBoxContainer/HBoxContainer"]
 custom_minimum_size = Vector2(50, 0)
 layout_mode = 2
+size_flags_horizontal = 3
 size_flags_vertical = 1
 text = "能量硬币报酬"
 
 [node name="Label7" type="Label" parent="Control/Panel/VBoxContainer/HBoxContainer"]
 custom_minimum_size = Vector2(50, 0)
 layout_mode = 2
+size_flags_horizontal = 3
 size_flags_vertical = 1
 text = "预计时长"
 
 [node name="Label8" type="Label" parent="Control/Panel/VBoxContainer/HBoxContainer"]
 custom_minimum_size = Vector2(50, 0)
 layout_mode = 2
+size_flags_horizontal = 3
 size_flags_vertical = 1
 text = "状态"
-
-[node name="HBoxContainer3" type="HBoxContainer" parent="Control/Panel/VBoxContainer"]
-layout_mode = 2
-
-[node name="Label2" type="Label" parent="Control/Panel/VBoxContainer/HBoxContainer3"]
-custom_minimum_size = Vector2(50, 0)
-layout_mode = 2
-size_flags_vertical = 1
-text = "编号"
-
-[node name="Label3" type="Label" parent="Control/Panel/VBoxContainer/HBoxContainer3"]
-custom_minimum_size = Vector2(50, 0)
-layout_mode = 2
-size_flags_vertical = 1
-text = "名称"
-
-[node name="Label" type="Label" parent="Control/Panel/VBoxContainer/HBoxContainer3"]
-custom_minimum_size = Vector2(50, 0)
-layout_mode = 2
-size_flags_vertical = 1
-text = "势力"
-
-[node name="Label4" type="Label" parent="Control/Panel/VBoxContainer/HBoxContainer3"]
-custom_minimum_size = Vector2(50, 0)
-layout_mode = 2
-size_flags_vertical = 1
-text = "类型"
-
-[node name="Label5" type="Label" parent="Control/Panel/VBoxContainer/HBoxContainer3"]
-custom_minimum_size = Vector2(50, 0)
-layout_mode = 2
-size_flags_vertical = 1
-text = "难度"
-
-[node name="Label6" type="Label" parent="Control/Panel/VBoxContainer/HBoxContainer3"]
-custom_minimum_size = Vector2(50, 0)
-layout_mode = 2
-size_flags_vertical = 1
-text = "能量硬币报酬"
-
-[node name="Label7" type="Label" parent="Control/Panel/VBoxContainer/HBoxContainer3"]
-custom_minimum_size = Vector2(50, 0)
-layout_mode = 2
-size_flags_vertical = 1
-text = "预计时长"
-
-[node name="Label8" type="Label" parent="Control/Panel/VBoxContainer/HBoxContainer3"]
-custom_minimum_size = Vector2(50, 0)
-layout_mode = 2
-size_flags_vertical = 1
-text = "状态"
-
-[node name="HBoxContainer2" type="HBoxContainer" parent="Control/Panel/VBoxContainer"]
-layout_mode = 2
