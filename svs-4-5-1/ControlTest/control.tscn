@@ -1,0 +1,355 @@
+[gd_scene format=3 uid="uid://bdqrbh2lm4gej"]
+
+[node name="Control" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ScrollContainer" type="ScrollContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="ScrollContainer"]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="ScrollContainer/HBoxContainer"]
+custom_minimum_size = Vector2(500, 0)
+layout_mode = 2
+size_flags_vertical = 0
+
+[node name="Label" type="Label" parent="ScrollContainer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 6
+text = "sdfsdffdssdfsdfsdfsdfsdfsdfsdfsdf
+
+
+sdfsdfsdfsdfsdfsdf
+
+
+sdffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"
+
+[node name="Label2" type="Label" parent="ScrollContainer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+text = "sdfsdffdssdfsdfsdfsdfsdfsdfsdfsdf
+
+
+sdfsdfsdfsdfsdfsdf
+
+
+sdffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"
+
+[node name="Label3" type="Label" parent="ScrollContainer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+text = "sdfsdffdssdfsdfsdfsdfsdfsdfsdfsdf
+
+
+sdfsdfsdfsdfsdfsdf
+
+
+sdffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"
+
+[node name="Label4" type="Label" parent="ScrollContainer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+text = "sdfsdffdssdfsdfsdfsdfsdfsdfsdfsdf
+
+
+sdfsdfsdfsdfsdfsdf
+
+
+sdffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"
+
+[node name="Label5" type="Label" parent="ScrollContainer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+text = "sdfsdffdssdfsdfsdfsdfsdfsdfsdfsdf
+
+
+sdfsdfsdfsdfsdfsdf
+
+
+sdffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"
+
+[node name="Label6" type="Label" parent="ScrollContainer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+text = "sdfsdffdssdfsdfsdfsdfsdfsdfsdfsdf
+
+
+sdfsdfsdfsdfsdfsdf
+
+
+sdffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"
+
+[node name="Label7" type="Label" parent="ScrollContainer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+text = "sdfsdffdssdfsdfsdfsdfsdfsdfsdfsdf
+
+
+sdfsdfsdfsdfsdfsdf
+
+
+sdffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"
+
+[node name="Label8" type="Label" parent="ScrollContainer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+text = "sdfsdffdssdfsdfsdfsdfsdfsdfsdfsdf
+
+
+sdfsdfsdfsdfsdfsdf
+
+
+sdffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="ScrollContainer/HBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="ScrollContainer/HBoxContainer/VBoxContainer2"]
+layout_mode = 2
+text = "sdfsdffdssdfsdfsdfsdfsdfsdfsdfsdf
+
+
+sdfsdfsdfsdfsdfsdf
+
+
+sdffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"
+
+[node name="Label2" type="Label" parent="ScrollContainer/HBoxContainer/VBoxContainer2"]
+layout_mode = 2
+text = "sdfsdffdssdfsdfsdfsdfsdfsdfsdfsdf
+
+
+sdfsdfsdfsdfsdfsdf
+
+
+sdffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"
+
+[node name="Label3" type="Label" parent="ScrollContainer/HBoxContainer/VBoxContainer2"]
+layout_mode = 2
+text = "sdfsdffdssdfsdfsdfsdfsdfsdfsdfsdf
+
+
+sdfsdfsdfsdfsdfsdf
+
+
+sdffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"
+
+[node name="Label4" type="Label" parent="ScrollContainer/HBoxContainer/VBoxContainer2"]
+layout_mode = 2
+text = "sdfsdffdssdfsdfsdfsdfsdfsdfsdfsdf
+
+
+sdfsdfsdfsdfsdfsdf
+
+
+sdffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"
+
+[node name="Label5" type="Label" parent="ScrollContainer/HBoxContainer/VBoxContainer2"]
+layout_mode = 2
+text = "sdfsdffdssdfsdfsdfsdfsdfsdfsdfsdf
+
+
+sdfsdfsdfsdfsdfsdf
+
+
+sdffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"
+
+[node name="Label6" type="Label" parent="ScrollContainer/HBoxContainer/VBoxContainer2"]
+layout_mode = 2
+text = "sdfsdffdssdfsdfsdfsdfsdfsdfsdfsdf
+
+
+sdfsdfsdfsdfsdfsdf
+
+
+sdffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"
+
+[node name="Label7" type="Label" parent="ScrollContainer/HBoxContainer/VBoxContainer2"]
+layout_mode = 2
+text = "sdfsdffdssdfsdfsdfsdfsdfsdfsdfsdf
+
+
+sdfsdfsdfsdfsdfsdf
+
+
+sdffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"
+
+[node name="Label8" type="Label" parent="ScrollContainer/HBoxContainer/VBoxContainer2"]
+layout_mode = 2
+text = "sdfsdffdssdfsdfsdfsdfsdfsdfsdfsdf
+
+
+sdfsdfsdfsdfsdfsdf
+
+
+sdffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"
+
+[node name="VBoxContainer3" type="VBoxContainer" parent="ScrollContainer/HBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="ScrollContainer/HBoxContainer/VBoxContainer3"]
+layout_mode = 2
+text = "sdfsdffdssdfsdfsdfsdfsdfsdfsdfsdf
+
+
+sdfsdfsdfsdfsdfsdf
+
+
+sdffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"
+
+[node name="Label2" type="Label" parent="ScrollContainer/HBoxContainer/VBoxContainer3"]
+layout_mode = 2
+text = "sdfsdffdssdfsdfsdfsdfsdfsdfsdfsdf
+
+
+sdfsdfsdfsdfsdfsdf
+
+
+sdffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"
+
+[node name="Label3" type="Label" parent="ScrollContainer/HBoxContainer/VBoxContainer3"]
+layout_mode = 2
+text = "sdfsdffdssdfsdfsdfsdfsdfsdfsdfsdf
+
+
+sdfsdfsdfsdfsdfsdf
+
+
+sdffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"
+
+[node name="Label4" type="Label" parent="ScrollContainer/HBoxContainer/VBoxContainer3"]
+layout_mode = 2
+text = "sdfsdffdssdfsdfsdfsdfsdfsdfsdfsdf
+
+
+sdfsdfsdfsdfsdfsdf
+
+
+sdffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"
+
+[node name="Label5" type="Label" parent="ScrollContainer/HBoxContainer/VBoxContainer3"]
+layout_mode = 2
+text = "sdfsdffdssdfsdfsdfsdfsdfsdfsdfsdf
+
+
+sdfsdfsdfsdfsdfsdf
+
+
+sdffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"
+
+[node name="Label6" type="Label" parent="ScrollContainer/HBoxContainer/VBoxContainer3"]
+layout_mode = 2
+text = "sdfsdffdssdfsdfsdfsdfsdfsdfsdfsdf
+
+
+sdfsdfsdfsdfsdfsdf
+
+
+sdffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"
+
+[node name="Label7" type="Label" parent="ScrollContainer/HBoxContainer/VBoxContainer3"]
+layout_mode = 2
+text = "sdfsdffdssdfsdfsdfsdfsdfsdfsdfsdf
+
+
+sdfsdfsdfsdfsdfsdf
+
+
+sdffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"
+
+[node name="Label8" type="Label" parent="ScrollContainer/HBoxContainer/VBoxContainer3"]
+layout_mode = 2
+text = "sdfsdffdssdfsdfsdfsdfsdfsdfsdfsdf
+
+
+sdfsdfsdfsdfsdfsdf
+
+
+sdffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"
+
+[node name="VBoxContainer4" type="VBoxContainer" parent="ScrollContainer/HBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="ScrollContainer/HBoxContainer/VBoxContainer4"]
+layout_mode = 2
+text = "sdfsdffdssdfsdfsdfsdfsdfsdfsdfsdf
+
+
+sdfsdfsdfsdfsdfsdf
+
+
+sdffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"
+
+[node name="Label2" type="Label" parent="ScrollContainer/HBoxContainer/VBoxContainer4"]
+layout_mode = 2
+text = "sdfsdffdssdfsdfsdfsdfsdfsdfsdfsdf
+
+
+sdfsdfsdfsdfsdfsdf
+
+
+sdffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"
+
+[node name="Label3" type="Label" parent="ScrollContainer/HBoxContainer/VBoxContainer4"]
+layout_mode = 2
+text = "sdfsdffdssdfsdfsdfsdfsdfsdfsdfsdf
+
+
+sdfsdfsdfsdfsdfsdf
+
+
+sdffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"
+
+[node name="Label4" type="Label" parent="ScrollContainer/HBoxContainer/VBoxContainer4"]
+layout_mode = 2
+text = "sdfsdffdssdfsdfsdfsdfsdfsdfsdfsdf
+
+
+sdfsdfsdfsdfsdfsdf
+
+
+sdffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"
+
+[node name="Label5" type="Label" parent="ScrollContainer/HBoxContainer/VBoxContainer4"]
+layout_mode = 2
+text = "sdfsdffdssdfsdfsdfsdfsdfsdfsdfsdf
+
+
+sdfsdfsdfsdfsdfsdf
+
+
+sdffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"
+
+[node name="Label6" type="Label" parent="ScrollContainer/HBoxContainer/VBoxContainer4"]
+layout_mode = 2
+text = "sdfsdffdssdfsdfsdfsdfsdfsdfsdfsdf
+
+
+sdfsdfsdfsdfsdfsdf
+
+
+sdffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"
+
+[node name="Label7" type="Label" parent="ScrollContainer/HBoxContainer/VBoxContainer4"]
+layout_mode = 2
+text = "sdfsdffdssdfsdfsdfsdfsdfsdfsdfsdf
+
+
+sdfsdfsdfsdfsdfsdf
+
+
+sdffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"
+
+[node name="Label8" type="Label" parent="ScrollContainer/HBoxContainer/VBoxContainer4"]
+layout_mode = 2
+text = "sdfsdffdssdfsdfsdfsdfsdfsdfsdfsdf
+
+
+sdfsdfsdfsdfsdfsdf
+
+
+sdffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"
