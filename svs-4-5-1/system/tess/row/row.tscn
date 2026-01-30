@@ -54,9 +54,8 @@ size_flags_horizontal = 3
 size_flags_vertical = 1
 text = "预计时长"
 
-[node name="Label8" type="Label" parent="."]
+[node name="Label8" type="Button" parent="."]
 custom_minimum_size = Vector2(50, 0)
 layout_mode = 2
 size_flags_horizontal = 3
-size_flags_vertical = 1
 text = "状态"
