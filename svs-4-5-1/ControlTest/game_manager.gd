@@ -476,7 +476,8 @@ func start_task(task_id: String, adventurer_id: String = "") -> bool:
 			print("✅ [GameManager] 自动分配冒险家: ", adv.get("name"), " (", assigned_adv_id, ")")
 			adventurer_status_changed.emit(assigned_adv_id, "执行中")
 		else:
-			print("⚠️ [GameManager] 没有可用冒险家，任务将无人执行")
+			print("❌ [GameManager] 没有可用冒险家，无法开始任务")
+			return false  # 没有冒险家时拒绝开始任务
 
 	# 更新任务状态
 	task["status"] = "进行中"

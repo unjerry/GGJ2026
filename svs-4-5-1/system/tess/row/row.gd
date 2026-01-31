@@ -137,6 +137,11 @@ func _on_status_button_pressed() -> void:
 	print("🔍 [TaskRow] 按钮被点击, 当前状态:", status)
 
 	if status == "可接取":
+		# 先检查是否可以接受新任务
+		if not _can_accept_new_task():
+			print("❌ [TaskRow] 无法接受任务：人员已满或没有可用冒险家")
+			return  # 直接返回，不发出信号
+
 		# 获取选中的冒险家ID
 		var selected_adventurer_id = ""
 		if adventurer_selector:
@@ -268,15 +273,13 @@ func _update_adventurer_selector() -> void:
 
 ## 连接 GameManager 信号，用于动态更新按钮状态
 func _connect_game_manager_signals() -> void:
-	# 通过场景树向上查找 GameManager
-	var root = get_tree().root
-	var main_scene = root.get_child(root.get_child_count() - 1)
-
-	# 查找 game_manager 节点
-	var game_manager = main_scene.get_node_or_null("GameManager")
+	# 通过场景树递归查找 GameManager
+	var game_manager = get_tree().root.find_child("GameManager", true, false)
 	if game_manager == null:
 		print("⚠️ 未找到 GameManager，无法连接信号")
 		return
+
+	print("✅ 找到 GameManager，准备连接信号")
 
 	# 连接任务开始信号（其他任务开始时，本行需要刷新按钮状态）
 	if game_manager.has_signal("task_started"):
@@ -309,45 +312,36 @@ func _on_adventurer_state_changed(_adventurer_id: String, _new_status: String) -
 
 ## 检查是否可以接受新任务（从 GameManager 获取）
 func _can_accept_new_task() -> bool:
-	# 通过场景树向上查找 GameManager
-	var root = get_tree().root
-	var main_scene = root.get_child(root.get_child_count() - 1)
-
-	# 查找 game_manager 节点
-	var game_manager = main_scene.get_node_or_null("GameManager")
+	# 通过场景树递归查找 GameManager
+	var game_manager = get_tree().root.find_child("GameManager", true, false)
 	if game_manager == null:
-		print("⚠️ 未找到 GameManager，默认允许接受任务")
-		return true
+		print("⚠️ 未找到 GameManager，默认禁止接受任务")
+		return false  # 找不到 GameManager 时禁止接受，更安全
 
 	# 调用 GameManager 的方法检查是否可以接受新任务
 	if game_manager.has_method("can_accept_new_task"):
-		return game_manager.can_accept_new_task()
+		var can_accept = game_manager.can_accept_new_task()
+		return can_accept
 	else:
-		print("⚠️ GameManager 没有 can_accept_new_task() 方法，默认允许接受任务")
-		return true
+		print("⚠️ GameManager 没有 can_accept_new_task() 方法，默认禁止接受任务")
+		return false
 
 ## 获取可用冒险家列表（从父节点的 GameManager 获取）
 func _get_available_adventurers() -> Array:
-	# 通过场景树向上查找 GameManager
-	var root = get_tree().root
-	var main_scene = root.get_child(root.get_child_count() - 1)
-
-	print("🔍 main_scene:", main_scene.name)  # ← 添加调试
-
-	# 查找 game_manager 节点
-	var game_manager = main_scene.get_node_or_null("GameManager")
+	# 通过场景树递归查找 GameManager
+	var game_manager = get_tree().root.find_child("GameManager", true, false)
 	if game_manager == null:
 		print("⚠️ 未找到 GameManager")
 		return []
 
-	print("🔍 找到 GameManager:", game_manager.name)  # ← 添加调试
+	print("🔍 找到 GameManager:", game_manager.name)
 
 	# 调用 GameManager 的方法获取可用冒险家
 	if game_manager.has_method("get_available_adventurers"):
 		var adventurers = game_manager.get_available_adventurers()
-		print("🔍 GameManager 返回", adventurers.size(), "个可用冒险家")  # ← 添加调试
+		print("🔍 GameManager 返回", adventurers.size(), "个可用冒险家")
 		return adventurers
 	else:
-		print("⚠️ GameManager 没有 get_available_adventurers() 方法")  # ← 添加调试
+		print("⚠️ GameManager 没有 get_available_adventurers() 方法")
 
 	return []
