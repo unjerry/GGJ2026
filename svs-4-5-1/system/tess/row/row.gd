@@ -23,6 +23,9 @@ var adventurer_selector: OptionButton = null
 # 存储当前任务数据
 var task_data: Dictionary = {}
 
+# 由主场景注入的 GameManager（避免依赖全局查找）
+var game_manager: Node = null
+
 # 倒计时时间（秒），用于显示"执行中 XX:XX"
 var remaining_time: float = 0.0
 var is_task_running: bool = false
@@ -54,6 +57,17 @@ func _process(delta: float) -> void:
 		if remaining_time < 0:
 			remaining_time = 0
 		_update_status_button()
+
+## 注入 GameManager 引用（由外部调用）
+func set_game_manager(manager: Node) -> void:
+	game_manager = manager
+
+## 统一获取 GameManager（优先注入，其次全局查找）
+func _get_game_manager() -> Node:
+	if game_manager != null and is_instance_valid(game_manager):
+		return game_manager
+	game_manager = get_tree().root.find_child("GameManager", true, false)
+	return game_manager
 
 ## 设置任务数据并更新UI
 ## @param data: 包含任务信息的字典
@@ -273,28 +287,28 @@ func _update_adventurer_selector() -> void:
 
 ## 连接 GameManager 信号，用于动态更新按钮状态
 func _connect_game_manager_signals() -> void:
-	# 通过场景树递归查找 GameManager
-	var game_manager = get_tree().root.find_child("GameManager", true, false)
-	if game_manager == null:
+	# 优先使用注入的 GameManager
+	var gm = _get_game_manager()
+	if gm == null:
 		print("⚠️ 未找到 GameManager，无法连接信号")
 		return
 
 	print("✅ 找到 GameManager，准备连接信号")
 
 	# 连接任务开始信号（其他任务开始时，本行需要刷新按钮状态）
-	if game_manager.has_signal("task_started"):
-		if not game_manager.task_started.is_connected(_on_task_state_changed):
-			game_manager.task_started.connect(_on_task_state_changed)
+	if gm.has_signal("task_started"):
+		if not gm.task_started.is_connected(_on_task_state_changed):
+			gm.task_started.connect(_on_task_state_changed)
 
 	# 连接任务完成信号（任务完成后，可能有冒险家空闲，需要刷新按钮）
-	if game_manager.has_signal("task_completed"):
-		if not game_manager.task_completed.is_connected(_on_task_state_changed):
-			game_manager.task_completed.connect(_on_task_state_changed)
+	if gm.has_signal("task_completed"):
+		if not gm.task_completed.is_connected(_on_task_state_changed):
+			gm.task_completed.connect(_on_task_state_changed)
 
 	# 连接冒险家状态变化信号
-	if game_manager.has_signal("adventurer_status_changed"):
-		if not game_manager.adventurer_status_changed.is_connected(_on_adventurer_state_changed):
-			game_manager.adventurer_status_changed.connect(_on_adventurer_state_changed)
+	if gm.has_signal("adventurer_status_changed"):
+		if not gm.adventurer_status_changed.is_connected(_on_adventurer_state_changed):
+			gm.adventurer_status_changed.connect(_on_adventurer_state_changed)
 
 ## 任务状态改变时的回调（用于刷新按钮状态和冒险家选择器）
 func _on_task_state_changed(_task_id = null, _data = null) -> void:
@@ -313,14 +327,14 @@ func _on_adventurer_state_changed(_adventurer_id: String, _new_status: String) -
 ## 检查是否可以接受新任务（从 GameManager 获取）
 func _can_accept_new_task() -> bool:
 	# 通过场景树递归查找 GameManager
-	var game_manager = get_tree().root.find_child("GameManager", true, false)
-	if game_manager == null:
+	var gm = _get_game_manager()
+	if gm == null:
 		print("⚠️ 未找到 GameManager，默认禁止接受任务")
 		return false  # 找不到 GameManager 时禁止接受，更安全
 
 	# 调用 GameManager 的方法检查是否可以接受新任务
-	if game_manager.has_method("can_accept_new_task"):
-		var can_accept = game_manager.can_accept_new_task()
+	if gm.has_method("can_accept_new_task"):
+		var can_accept = gm.can_accept_new_task()
 		return can_accept
 	else:
 		print("⚠️ GameManager 没有 can_accept_new_task() 方法，默认禁止接受任务")
@@ -329,16 +343,16 @@ func _can_accept_new_task() -> bool:
 ## 获取可用冒险家列表（从父节点的 GameManager 获取）
 func _get_available_adventurers() -> Array:
 	# 通过场景树递归查找 GameManager
-	var game_manager = get_tree().root.find_child("GameManager", true, false)
-	if game_manager == null:
+	var gm = _get_game_manager()
+	if gm == null:
 		print("⚠️ 未找到 GameManager")
 		return []
 
-	print("🔍 找到 GameManager:", game_manager.name)
+	print("🔍 找到 GameManager:", gm.name)
 
 	# 调用 GameManager 的方法获取可用冒险家
-	if game_manager.has_method("get_available_adventurers"):
-		var adventurers = game_manager.get_available_adventurers()
+	if gm.has_method("get_available_adventurers"):
+		var adventurers = gm.get_available_adventurers()
 		print("🔍 GameManager 返回", adventurers.size(), "个可用冒险家")
 		return adventurers
 	else:

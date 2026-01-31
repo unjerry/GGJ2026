@@ -37,6 +37,7 @@ var resource_columns: Array = []
 func _ready() -> void:
 	# 创建游戏管理器
 	game_manager = GameManagerScript.new()
+	game_manager.name = "GameManager"
 	add_child(game_manager)
 
 	# 连接信号
@@ -78,6 +79,8 @@ func refresh_task_panel() -> void:
 	var tasks = game_manager.get_all_tasks()
 	for task_data in tasks:
 		var row_instance = row_scene.instantiate()
+		if row_instance.has_method("set_game_manager"):
+			row_instance.set_game_manager(game_manager)
 		row_instance.set_task_data(task_data)
 
 		# 连接任务开始信号
