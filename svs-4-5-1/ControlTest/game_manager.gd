@@ -477,7 +477,7 @@ func start_task(task_id: String, adventurer_id: String = "") -> bool:
 			adventurer_status_changed.emit(assigned_adv_id, "执行中")
 		else:
 			print("❌ [GameManager] 没有可用冒险家，无法开始任务")
-			return false  # 没有冒险家时拒绝开始任务
+			return false # 没有冒险家时拒绝开始任务
 
 	# 更新任务状态
 	task["status"] = "进行中"
@@ -539,7 +539,7 @@ func complete_task(task_id: String) -> void:
 func _parse_duration_to_seconds(duration_str: String) -> float:
 	if duration_str.ends_with("毫秒"):
 		var num_str = duration_str.replace("毫秒", "").strip_edges()
-		return float(num_str) / 1000.0  # 毫秒转秒
+		return float(num_str) / 1000.0 # 毫秒转秒
 	elif duration_str.ends_with("秒"):
 		var num_str = duration_str.replace("秒", "").strip_edges()
 		return float(num_str)
