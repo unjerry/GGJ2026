@@ -327,6 +327,13 @@ size_flags_horizontal = 3
 size_flags_vertical = 1
 text = "能力值"
 
+[node name="Label7" type="Label" parent="Control3/VBoxContainer/Panel/ScrollContainer/VBoxContainer/HBoxContainer"]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
+text = "状态"
+
 [node name="Control4" type="Control" parent="."]
 layout_mode = 1
 anchor_left = 0.59
