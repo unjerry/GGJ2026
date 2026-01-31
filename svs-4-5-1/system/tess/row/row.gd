@@ -46,8 +46,10 @@ func _process(delta: float) -> void:
 func set_task_data(data: Dictionary) -> void:
 	task_data = data
 
-	# 解析倒计时时间（如果有）
-	if data.has("remaining_time"):
+	# 解析倒计时时间（如果有）- 支持新旧格式
+	if data.has("remaining_seconds"):
+		remaining_time = float(data.get("remaining_seconds", 0))
+	elif data.has("remaining_time"):
 		remaining_time = float(data.get("remaining_time", 0))
 	elif data.get("status", "") == "进行中":
 		# 如果状态是进行中但没有剩余时间，从duration解析
@@ -63,7 +65,21 @@ func _update_labels() -> void:
 	label_faction.text = task_data.get("faction", "")
 	label_type.text = task_data.get("type", "")
 	label_difficulty.text = task_data.get("difficulty", "")
-	label_reward.text = task_data.get("reward", "")
+
+	# 处理奖励显示 - 支持新旧格式
+	var rewards = task_data.get("rewards", {})
+	if rewards is Dictionary and not rewards.is_empty():
+		# 新格式：字典形式的多资源奖励
+		var reward_text = ""
+		for res_name in rewards:
+			if reward_text != "":
+				reward_text += " "
+			reward_text += str(rewards[res_name])
+		label_reward.text = reward_text
+	else:
+		# 旧格式：字符串
+		label_reward.text = task_data.get("reward", "")
+
 	label_duration.text = task_data.get("duration", "")
 
 	# 更新状态按钮

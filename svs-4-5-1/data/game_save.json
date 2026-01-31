@@ -1,0 +1,111 @@
+{
+	"version": "1.0",
+	"save_time": "2026-01-31T12:00:00",
+	"auto_save_interval": 10,
+
+	"player": {
+		"max_concurrent_tasks": 1
+	},
+
+	"resources": {
+		"能量硬币": 500,
+		"木材": 20,
+		"石料": 10,
+		"铁矿": 0
+	},
+
+	"tasks": [
+		{
+			"id": "001",
+			"name": "巡逻边境",
+			"faction": "帝国",
+			"type": "护送",
+			"difficulty": "简单",
+			"rewards": {"能量硬币": 100, "木材": 5},
+			"duration": "1分钟",
+			"status": "可接取",
+			"assigned_adventurer": null,
+			"start_time": null,
+			"remaining_seconds": 60
+		},
+		{
+			"id": "002",
+			"name": "矿物采集",
+			"faction": "联邦",
+			"type": "收集",
+			"difficulty": "中等",
+			"rewards": {"能量硬币": 200, "石料": 10},
+			"duration": "2分钟",
+			"status": "可接取",
+			"assigned_adventurer": null,
+			"start_time": null,
+			"remaining_seconds": 120
+		},
+		{
+			"id": "003",
+			"name": "剿灭海盗",
+			"faction": "独立",
+			"type": "战斗",
+			"difficulty": "困难",
+			"rewards": {"能量硬币": 500, "铁矿": 15},
+			"duration": "3分钟",
+			"status": "可接取",
+			"assigned_adventurer": null,
+			"start_time": null,
+			"remaining_seconds": 180
+		},
+		{
+			"id": "004",
+			"name": "外交任务",
+			"faction": "中立",
+			"type": "谈判",
+			"difficulty": "中等",
+			"rewards": {"能量硬币": 300},
+			"duration": "1分钟",
+			"status": "可接取",
+			"assigned_adventurer": null,
+			"start_time": null,
+			"remaining_seconds": 60
+		},
+		{
+			"id": "005",
+			"name": "紧急救援",
+			"faction": "帝国",
+			"type": "救援",
+			"difficulty": "困难",
+			"rewards": {"能量硬币": 400, "木材": 10, "石料": 5},
+			"duration": "2分钟",
+			"status": "锁定",
+			"assigned_adventurer": null,
+			"start_time": null,
+			"remaining_seconds": 120
+		}
+	],
+
+	"adventurers": [],
+
+	"guild": {
+		"level": 1,
+		"name": "初级协会",
+		"recruitable_adventurers": [
+			{
+				"id": "adv_001",
+				"name": "艾丽娅",
+				"faction": "帝国",
+				"class": "剑士",
+				"stats": {"攻击": 8, "防御": 6, "速度": 7},
+				"recruitment_cost": {"能量硬币": 300, "木材": 10}
+			},
+			{
+				"id": "adv_002",
+				"name": "莱恩",
+				"faction": "联邦",
+				"class": "弓箭手",
+				"stats": {"攻击": 7, "防御": 4, "速度": 9},
+				"recruitment_cost": {"能量硬币": 400, "木材": 15}
+			}
+		],
+		"upgrade_cost": {"能量硬币": 1000, "木材": 50, "石料": 30},
+		"next_level_bonus": "解锁稀有冒险家"
+	}
+}
