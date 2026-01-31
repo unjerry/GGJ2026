@@ -54,5 +54,87 @@
 			"石料": 30
 		},
 		"next_level_bonus": "解锁稀有冒险家"
+	},
+	"config": {
+		"player": {
+			"max_concurrent_tasks_base": 1,
+			"max_concurrent_tasks_per_adventurer": 1
+		},
+		"tasks": {
+			"id_prefix": "task_",
+			"pool": {"min_available": 3, "max_available": 5},
+			"factions": ["帝国", "联邦", "独立", "中立"],
+			"types": ["护送", "收集", "战斗", "谈判", "救援", "探索"],
+			"name_prefixes": {
+				"护送": ["护送", "保护", "守卫"],
+				"收集": ["采集", "收集", "搜寻"],
+				"战斗": ["剿灭", "讨伐", "消灭"],
+				"谈判": ["外交", "谈判", "调解"],
+				"救援": ["救援", "营救", "紧急救援"],
+				"探索": ["探索", "调查", "侦查"]
+			},
+			"name_targets": ["边境", "矿区", "海盗", "使节", "村民", "遗迹", "商队", "要塞", "森林", "山脉"],
+			"guild_difficulty_offset": {"min_offset": 0, "max_offset": 1},
+			"extra_reward": {
+				"min_tier": 2,
+				"resources": ["木材", "石料", "铁矿"],
+				"base_amount_per_tier": 5,
+				"variance_min": 0,
+				"variance_max": 10
+			},
+			"difficulty_tiers": [
+				{"tier": 1, "name": "简单", "coin_base": 50, "coin_variance_min": -20, "coin_variance_max": 50, "duration_min_s": 1, "duration_max_s": 5},
+				{"tier": 2, "name": "中等", "coin_base": 100, "coin_variance_min": -20, "coin_variance_max": 50, "duration_min_s": 5, "duration_max_s": 15},
+				{"tier": 3, "name": "困难", "coin_base": 150, "coin_variance_min": -20, "coin_variance_max": 50, "duration_min_s": 15, "duration_max_s": 30},
+				{"tier": 4, "name": "精英", "coin_base": 200, "coin_variance_min": -20, "coin_variance_max": 50, "duration_min_s": 30, "duration_max_s": 60},
+				{"tier": 5, "name": "传说", "coin_base": 250, "coin_variance_min": -20, "coin_variance_max": 50, "duration_min_s": 60, "duration_max_s": 120},
+				{"tier": 6, "name": "史诗", "coin_base": 300, "coin_variance_min": -20, "coin_variance_max": 50, "duration_min_s": 120, "duration_max_s": 300}
+			],
+			"duration_display": {"ms_under_s": 3, "sec_under_s": 60},
+			"catalog": [
+				{"name": "巡逻边境", "faction": "帝国", "type": "护送"},
+				{"name": "矿物采集", "faction": "联邦", "type": "收集"},
+				{"name": "剿灭海盗", "faction": "独立", "type": "战斗"},
+				{"name": "外交任务", "faction": "中立", "type": "谈判"},
+				{"name": "紧急救援", "faction": "帝国", "type": "救援"}
+			]
+		},
+		"adventurers": {
+			"classes": [
+				{"class": "剑士", "stat_profile": {"攻击": 1.2, "防御": 1.0, "速度": 0.8}},
+				{"class": "弓箭手", "stat_profile": {"攻击": 1.0, "防御": 0.6, "速度": 1.4}},
+				{"class": "法师", "stat_profile": {"攻击": 1.5, "防御": 0.5, "速度": 0.8}},
+				{"class": "盾卫", "stat_profile": {"攻击": 0.7, "防御": 1.5, "速度": 0.6}},
+				{"class": "刺客", "stat_profile": {"攻击": 1.3, "防御": 0.6, "速度": 1.5}},
+				{"class": "游侠", "stat_profile": {"攻击": 1.0, "防御": 0.9, "速度": 1.2}}
+			],
+			"names": [
+				"艾丽娅", "莱恩", "卡尔", "索菲娅", "泰勒", "玛莎",
+				"杰克", "罗莎", "雷蒙德", "伊莎贝拉", "维克多", "娜塔莉",
+				"亚历山大", "凯瑟琳", "塞巴斯蒂安", "奥利维亚"
+			],
+			"factions": ["帝国", "联邦", "独立", "中立"],
+			"base_stat": {"min_base": 5, "max_base": 8, "min_per_level": 3, "max_per_level": 4},
+			"cost": {
+				"base_multiplier": 10,
+				"variance_min": -50,
+				"variance_max": 100,
+				"wood_level": 2,
+				"wood_divisor": 2,
+				"wood_variance_max": 10,
+				"stone_level": 3,
+				"stone_divisor": 3,
+				"stone_variance_max": 5
+			},
+			"recruitable_count": {"base": 2, "extra_per_level": 1, "max_extra": 2}
+		},
+		"guild": {
+			"recruitable_cap": 4,
+			"levels": {
+				"1": {"name": "初级协会", "upgrade_cost": {"能量硬币": 1000, "木材": 50, "石料": 30}, "next_level_bonus": "解锁稀有冒险家"},
+				"2": {"name": "中级协会", "upgrade_cost": {"能量硬币": 2000, "木材": 100, "石料": 60}, "next_level_bonus": "解锁稀有冒险家"},
+				"3": {"name": "高级协会", "upgrade_cost": {"能量硬币": 3000, "木材": 150, "石料": 90}, "next_level_bonus": "解锁稀有冒险家"}
+			}
+		}
 	}
 }

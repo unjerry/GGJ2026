@@ -20,29 +20,6 @@ const BUILTIN_SAVE_PATH: String = "res://data/game_save.json"
 const EXTERNAL_SAVE_RELATIVE_PATH: String = "data/game_save.json"
 const AUTO_SAVE_INTERVAL: float = 10.0 # 秒
 
-# 任务刷新系统常量
-const MIN_AVAILABLE_TASKS: int = 3
-const MAX_AVAILABLE_TASKS: int = 5
-const TASK_ID_PREFIX: String = "task_"
-
-# 冒险家生成系统常量
-const ADVENTURER_CLASSES = [
-	{"class": "剑士", "stat_profile": {"攻击": 1.2, "防御": 1.0, "速度": 0.8}},
-	{"class": "弓箭手", "stat_profile": {"攻击": 1.0, "防御": 0.6, "速度": 1.4}},
-	{"class": "法师", "stat_profile": {"攻击": 1.5, "防御": 0.5, "速度": 0.8}},
-	{"class": "盾卫", "stat_profile": {"攻击": 0.7, "防御": 1.5, "速度": 0.6}},
-	{"class": "刺客", "stat_profile": {"攻击": 1.3, "防御": 0.6, "速度": 1.5}},
-	{"class": "游侠", "stat_profile": {"攻击": 1.0, "防御": 0.9, "速度": 1.2}}
-]
-
-const ADVENTURER_NAMES = [
-	"艾丽娅", "莱恩", "卡尔", "索菲娅", "泰勒", "玛莎",
-	"杰克", "罗莎", "雷蒙德", "伊莎贝拉", "维克多", "娜塔莉",
-	"亚历山大", "凯瑟琳", "塞巴斯蒂安", "奥利维亚"
-]
-
-const FACTIONS = ["帝国", "联邦", "独立", "中立"]
-
 # ========== 游戏数据 ==========
 var game_data: Dictionary = {}
 var save_timer: float = 0.0
@@ -124,6 +101,7 @@ func load_game() -> void:
 	print("✅ 存档加载成功")
 
 	# 执行迁移逻辑
+	_ensure_config()
 	_migrate_save_data()
 
 	game_loaded.emit()
@@ -253,6 +231,30 @@ func _migrate_save_data() -> void:
 		print("📋 迁移: 重新生成可招募冒险家")
 		regenerate_recruitable_adventurers(get_guild_level())
 
+	# 迁移7: 如果缺少协会等级配置，补齐默认配置
+	_ensure_guild_level_config()
+
+## 确保配置存在
+func _ensure_config() -> void:
+	if not game_data.has("config") or typeof(game_data["config"]) != TYPE_DICTIONARY:
+		game_data["config"] = _get_default_config()
+		return
+
+	# 补齐缺失的配置项（浅合并）
+	var defaults = _get_default_config()
+	for key in defaults.keys():
+		if not game_data["config"].has(key):
+			game_data["config"][key] = defaults[key]
+
+## 确保协会等级配置存在
+func _ensure_guild_level_config() -> void:
+	var config = game_data.get("config", {})
+	var guild_cfg = config.get("guild", {})
+	if not guild_cfg.has("levels"):
+		guild_cfg["levels"] = _get_default_config().get("guild", {}).get("levels", {})
+		config["guild"] = guild_cfg
+		game_data["config"] = config
+
 ## 创建默认游戏数据
 func _create_default_game_data() -> void:
 	game_data = {
@@ -349,6 +351,94 @@ func _create_default_game_data() -> void:
 			],
 			"upgrade_cost": {"能量硬币": 1000, "木材": 50, "石料": 30},
 			"next_level_bonus": "解锁稀有冒险家"
+		},
+
+		# 可调配置数据（策划可在存档中修改）
+		"config": _get_default_config()
+	}
+
+## 默认配置（用于首次创建与缺失迁移）
+func _get_default_config() -> Dictionary:
+	return {
+		"player": {
+			"max_concurrent_tasks_base": 1,
+			"max_concurrent_tasks_per_adventurer": 1
+		},
+		"tasks": {
+			"id_prefix": "task_",
+			"pool": {"min_available": 3, "max_available": 5},
+			"factions": ["帝国", "联邦", "独立", "中立"],
+			"types": ["护送", "收集", "战斗", "谈判", "救援", "探索"],
+			"name_prefixes": {
+				"护送": ["护送", "保护", "守卫"],
+				"收集": ["采集", "收集", "搜寻"],
+				"战斗": ["剿灭", "讨伐", "消灭"],
+				"谈判": ["外交", "谈判", "调解"],
+				"救援": ["救援", "营救", "紧急救援"],
+				"探索": ["探索", "调查", "侦查"]
+			},
+			"name_targets": ["边境", "矿区", "海盗", "使节", "村民", "遗迹", "商队", "要塞", "森林", "山脉"],
+			"guild_difficulty_offset": {"min_offset": 0, "max_offset": 1},
+			"extra_reward": {
+				"min_tier": 2,
+				"resources": ["木材", "石料", "铁矿"],
+				"base_amount_per_tier": 5,
+				"variance_min": 0,
+				"variance_max": 10
+			},
+			"difficulty_tiers": [
+				{"tier": 1, "name": "简单", "coin_base": 50, "coin_variance_min": -20, "coin_variance_max": 50, "duration_min_s": 1, "duration_max_s": 5},
+				{"tier": 2, "name": "中等", "coin_base": 100, "coin_variance_min": -20, "coin_variance_max": 50, "duration_min_s": 5, "duration_max_s": 15},
+				{"tier": 3, "name": "困难", "coin_base": 150, "coin_variance_min": -20, "coin_variance_max": 50, "duration_min_s": 15, "duration_max_s": 30},
+				{"tier": 4, "name": "精英", "coin_base": 200, "coin_variance_min": -20, "coin_variance_max": 50, "duration_min_s": 30, "duration_max_s": 60},
+				{"tier": 5, "name": "传说", "coin_base": 250, "coin_variance_min": -20, "coin_variance_max": 50, "duration_min_s": 60, "duration_max_s": 120},
+				{"tier": 6, "name": "史诗", "coin_base": 300, "coin_variance_min": -20, "coin_variance_max": 50, "duration_min_s": 120, "duration_max_s": 300}
+			],
+			"duration_display": {"ms_under_s": 3, "sec_under_s": 60},
+			"catalog": [
+				{"name": "巡逻边境", "faction": "帝国", "type": "护送"},
+				{"name": "矿物采集", "faction": "联邦", "type": "收集"},
+				{"name": "剿灭海盗", "faction": "独立", "type": "战斗"},
+				{"name": "外交任务", "faction": "中立", "type": "谈判"},
+				{"name": "紧急救援", "faction": "帝国", "type": "救援"}
+			]
+		},
+		"adventurers": {
+			"classes": [
+				{"class": "剑士", "stat_profile": {"攻击": 1.2, "防御": 1.0, "速度": 0.8}},
+				{"class": "弓箭手", "stat_profile": {"攻击": 1.0, "防御": 0.6, "速度": 1.4}},
+				{"class": "法师", "stat_profile": {"攻击": 1.5, "防御": 0.5, "速度": 0.8}},
+				{"class": "盾卫", "stat_profile": {"攻击": 0.7, "防御": 1.5, "速度": 0.6}},
+				{"class": "刺客", "stat_profile": {"攻击": 1.3, "防御": 0.6, "速度": 1.5}},
+				{"class": "游侠", "stat_profile": {"攻击": 1.0, "防御": 0.9, "速度": 1.2}}
+			],
+			"names": [
+				"艾丽娅", "莱恩", "卡尔", "索菲娅", "泰勒", "玛莎",
+				"杰克", "罗莎", "雷蒙德", "伊莎贝拉", "维克多", "娜塔莉",
+				"亚历山大", "凯瑟琳", "塞巴斯蒂安", "奥利维亚"
+			],
+			"factions": ["帝国", "联邦", "独立", "中立"],
+			"base_stat": {"min_base": 5, "max_base": 8, "min_per_level": 3, "max_per_level": 4},
+			"cost": {
+				"base_multiplier": 10,
+				"variance_min": -50,
+				"variance_max": 100,
+				"wood_level": 2,
+				"wood_divisor": 2,
+				"wood_variance_max": 10,
+				"stone_level": 3,
+				"stone_divisor": 3,
+				"stone_variance_max": 5
+			},
+			"recruitable_count": {"base": 2, "extra_per_level": 1, "max_extra": 2}
+		},
+		"guild": {
+			"recruitable_cap": 4,
+			"levels": {
+				"1": {"name": "初级协会", "upgrade_cost": {"能量硬币": 1000, "木材": 50, "石料": 30}, "next_level_bonus": "解锁稀有冒险家"},
+				"2": {"name": "中级协会", "upgrade_cost": {"能量硬币": 2000, "木材": 100, "石料": 60}, "next_level_bonus": "解锁稀有冒险家"},
+				"3": {"name": "高级协会", "upgrade_cost": {"能量硬币": 3000, "木材": 150, "石料": 90}, "next_level_bonus": "解锁稀有冒险家"}
+			}
 		}
 	}
 
@@ -417,7 +507,10 @@ func get_running_tasks_count() -> int:
 
 ## 获取最大同时任务数（1 + 冒险家数量）
 func get_max_concurrent_tasks() -> int:
-	return 1 + get_all_adventurers().size()
+	var cfg = game_data.get("config", {}).get("player", {})
+	var base = int(cfg.get("max_concurrent_tasks_base", 1))
+	var per_adv = int(cfg.get("max_concurrent_tasks_per_adventurer", 1))
+	return base + (get_all_adventurers().size() * per_adv)
 
 ## 是否可以接受新任务
 func can_accept_new_task() -> bool:
@@ -550,39 +643,61 @@ func _parse_duration_to_seconds(duration_str: String) -> float:
 
 ## 生成新任务（基于公会等级）
 func generate_new_task(guild_level: int) -> Dictionary:
+	var cfg = game_data.get("config", {}).get("tasks", {})
+
 	task_id_counter += 1
-	var task_id = TASK_ID_PREFIX + str(task_id_counter)
+	var task_id_prefix = str(cfg.get("id_prefix", "task_"))
+	var task_id = task_id_prefix + str(task_id_counter)
 
 	# 难度等级基于公会等级
-	var difficulty_tier = _get_difficulty_tier(guild_level)
-	var difficulty_name = _get_difficulty_name(difficulty_tier)
+	var difficulty_tier = _get_difficulty_tier(guild_level, cfg)
+	var difficulty_name = _get_difficulty_name(difficulty_tier, cfg)
 
 	# 随机任务类型和势力
-	var task_types = ["护送", "收集", "战斗", "谈判", "救援", "探索"]
-	var factions = ["帝国", "联邦", "独立", "中立"]
+	var task_types = cfg.get("types", ["护送", "收集", "战斗", "谈判", "救援", "探索"])
+	var factions = cfg.get("factions", ["帝国", "联邦", "独立", "中立"])
+	if task_types.size() == 0:
+		task_types = _get_default_config().get("tasks", {}).get("types", [])
+	if factions.size() == 0:
+		factions = _get_default_config().get("tasks", {}).get("factions", [])
 
 	var task_type = task_types[randi() % task_types.size()]
 	var faction = factions[randi() % factions.size()]
 
 	# 奖励基于难度
-	var base_coins = 50 * difficulty_tier
-	var coin_variance = randi_range(-20, 50)
+	var tier_cfg = _get_tier_config(difficulty_tier, cfg)
+	var base_coins = int(tier_cfg.get("coin_base", 50 * difficulty_tier))
+	var coin_variance = randi_range(int(tier_cfg.get("coin_variance_min", -20)), int(tier_cfg.get("coin_variance_max", 50)))
 	var coins = base_coins + coin_variance
 
 	var rewards = {"能量硬币": coins}
 
 	# 难度2+添加额外资源奖励
-	if difficulty_tier >= 2:
-		var resources = ["木材", "石料", "铁矿"]
-		var res_type = resources[randi() % resources.size()]
-		rewards[res_type] = 5 * difficulty_tier + randi_range(0, 10)
+	var extra_cfg = cfg.get("extra_reward", {})
+	var extra_min_tier = int(extra_cfg.get("min_tier", 2))
+	if difficulty_tier >= extra_min_tier:
+		var resources = extra_cfg.get("resources", ["木材", "石料", "铁矿"])
+		if resources.size() > 0:
+			var res_type = resources[randi() % resources.size()]
+			var base_amount = int(extra_cfg.get("base_amount_per_tier", 5)) * difficulty_tier
+			var extra_amount = randi_range(int(extra_cfg.get("variance_min", 0)), int(extra_cfg.get("variance_max", 10)))
+			rewards[res_type] = base_amount + extra_amount
 
 	# 时长随难度增加，支持毫秒/秒/分钟
-	var duration_str = _generate_task_duration(difficulty_tier)
+	var duration_str = _generate_task_duration(difficulty_tier, cfg)
 	var duration_seconds = _parse_duration_to_seconds(duration_str)
 
 	# 生成任务名称
-	var task_name = _generate_task_name(task_type, faction, difficulty_tier)
+	var task_name = _generate_task_name(task_type, faction, difficulty_tier, cfg)
+
+	# 从候选列表里选取（如果有）
+	var catalog = cfg.get("catalog", [])
+	if typeof(catalog) == TYPE_ARRAY and catalog.size() > 0:
+		var entry = catalog[randi() % catalog.size()]
+		if typeof(entry) == TYPE_DICTIONARY:
+			task_name = str(entry.get("name", task_name))
+			task_type = str(entry.get("type", task_type))
+			faction = str(entry.get("faction", faction))
 
 	return {
 		"id": task_id,
@@ -599,14 +714,21 @@ func generate_new_task(guild_level: int) -> Dictionary:
 	}
 
 ## 获取难度等级
-func _get_difficulty_tier(guild_level: int) -> int:
+func _get_difficulty_tier(guild_level: int, cfg: Dictionary) -> int:
 	# 公会1级: 难度1-2, 公会2级: 难度2-3, ...
-	var min_tier = guild_level
-	var max_tier = guild_level + 1
+	var offsets = cfg.get("guild_difficulty_offset", {})
+	var min_offset = int(offsets.get("min_offset", 0))
+	var max_offset = int(offsets.get("max_offset", 1))
+	var min_tier = guild_level + min_offset
+	var max_tier = guild_level + max_offset
 	return randi_range(min_tier, max_tier)
 
 ## 获取难度名称
-func _get_difficulty_name(tier: int) -> String:
+func _get_difficulty_name(tier: int, cfg: Dictionary) -> String:
+	var tiers = cfg.get("difficulty_tiers", [])
+	for entry in tiers:
+		if typeof(entry) == TYPE_DICTIONARY and int(entry.get("tier", -1)) == tier:
+			return str(entry.get("name", ""))
 	match tier:
 		1: return "简单"
 		2: return "中等"
@@ -616,20 +738,14 @@ func _get_difficulty_name(tier: int) -> String:
 		_: return "史诗"
 
 ## 生成任务名称
-func _generate_task_name(task_type: String, _faction: String, tier: int) -> String:
-	var prefixes = {
-		"护送": ["护送", "保护", "守卫"],
-		"收集": ["采集", "收集", "搜寻"],
-		"战斗": ["剿灭", "讨伐", "消灭"],
-		"谈判": ["外交", "谈判", "调解"],
-		"救援": ["救援", "营救", "紧急救援"],
-		"探索": ["探索", "调查", "侦查"]
-	}
-
-	var targets = ["边境", "矿区", "海盗", "使节", "村民", "遗迹", "商队", "要塞", "森林", "山脉"]
+func _generate_task_name(task_type: String, _faction: String, tier: int, cfg: Dictionary) -> String:
+	var prefixes = cfg.get("name_prefixes", {})
+	var targets = cfg.get("name_targets", [])
 
 	var prefix_list = prefixes.get(task_type, ["任务"])
 	var prefix = prefix_list[randi() % prefix_list.size()]
+	if targets.size() == 0:
+		return prefix
 	var target = targets[randi() % targets.size()]
 
 	if tier >= 4:
@@ -640,45 +756,34 @@ func _generate_task_name(task_type: String, _faction: String, tier: int) -> Stri
 		return prefix + target
 
 ## 生成任务时长（基于难度等级）
-func _generate_task_duration(difficulty_tier: int) -> String:
-	# 根据难度等级决定时长范围
-	match difficulty_tier:
-		1:
-			# 简单任务: 1-5秒
-			var seconds = randi_range(1, 5)
-			if seconds < 3:
-				# 1-2秒 → 显示毫秒（更容易看到倒计时）
-				return str(seconds * 1000) + "毫秒"
-			else:
-				return str(seconds) + "秒"
+func _generate_task_duration(difficulty_tier: int, cfg: Dictionary) -> String:
+	# 根据配置决定时长范围
+	var tier_cfg = _get_tier_config(difficulty_tier, cfg)
+	var min_s = int(tier_cfg.get("duration_min_s", 60))
+	var max_s = int(tier_cfg.get("duration_max_s", 60))
+	if max_s < min_s:
+		max_s = min_s
+	var seconds = randi_range(min_s, max_s)
 
-		2:
-			# 中等任务: 5-15秒
-			var seconds = randi_range(5, 15)
-			return str(seconds) + "秒"
+	var display = cfg.get("duration_display", {})
+	var ms_under = float(display.get("ms_under_s", 3))
+	var sec_under = float(display.get("sec_under_s", 60))
 
-		3:
-			# 困难任务: 15-30秒
-			var seconds = randi_range(15, 30)
-			return str(seconds) + "秒"
+	if seconds < ms_under:
+		return str(seconds * 1000) + "毫秒"
+	elif seconds < sec_under:
+		return str(seconds) + "秒"
+	else:
+		var minutes = int(ceil(seconds / 60.0))
+		return str(minutes) + "分钟"
 
-		4:
-			# 精英任务: 30-60秒
-			var seconds = randi_range(30, 60)
-			if seconds < 60:
-				return str(seconds) + "秒"
-			else:
-				return "1分钟"
-
-		5:
-			# 传说任务: 1-2分钟
-			var minutes = randi_range(1, 2)
-			return str(minutes) + "分钟"
-
-		_:
-			# 史诗任务: 2-5分钟
-			var minutes = randi_range(2, 5)
-			return str(minutes) + "分钟"
+## 获取难度配置
+func _get_tier_config(tier: int, cfg: Dictionary) -> Dictionary:
+	var tiers = cfg.get("difficulty_tiers", [])
+	for entry in tiers:
+		if typeof(entry) == TYPE_DICTIONARY and int(entry.get("tier", -1)) == tier:
+			return entry
+	return {}
 
 ## 获取可用任务列表
 func get_available_tasks() -> Array:
@@ -690,6 +795,11 @@ func get_available_tasks() -> Array:
 
 ## 维护任务池（确保3-5个可用任务）
 func maintain_task_pool() -> void:
+	var cfg = game_data.get("config", {}).get("tasks", {})
+	var pool_cfg = cfg.get("pool", {})
+	var min_available = int(pool_cfg.get("min_available", 3))
+	var max_available = int(pool_cfg.get("max_available", 5))
+
 	var available_tasks = get_available_tasks()
 	var available_count = available_tasks.size()
 
@@ -702,14 +812,14 @@ func maintain_task_pool() -> void:
 		i -= 1
 
 	# 如果可用任务少于最小值，生成新任务
-	while available_count < MIN_AVAILABLE_TASKS:
+	while available_count < min_available:
 		var new_task = generate_new_task(get_guild_level())
 		tasks.append(new_task)
 		available_count += 1
 
 	# 限制最大可用任务数
-	if available_count > MAX_AVAILABLE_TASKS:
-		var to_remove = available_count - MAX_AVAILABLE_TASKS
+	if available_count > max_available:
+		var to_remove = available_count - max_available
 		i = 0
 		while i < tasks.size() and to_remove > 0:
 			if tasks[i].get("status") == "可接取":
@@ -794,8 +904,11 @@ func recruit_adventurer(adventurer_id: String) -> bool:
 
 	# 生成新的冒险家补充
 	var guild_level = get_guild_level()
-	var new_recruit = generate_recruitable_adventurer(guild_level)
-	recruitable.append(new_recruit)
+	var guild_cfg = game_data.get("config", {}).get("guild", {})
+	var cap = int(guild_cfg.get("recruitable_cap", 999))
+	if recruitable.size() < cap:
+		var new_recruit = generate_recruitable_adventurer(guild_level)
+		recruitable.append(new_recruit)
 
 	adventurer_recruited.emit(adventurer_id)
 	print("✅ 招募成功: ", target_adv.get("name"))
@@ -817,18 +930,23 @@ func get_recruitable_adventurers() -> Array:
 
 ## 生成可招募冒险家
 func generate_recruitable_adventurer(guild_level: int) -> Dictionary:
+	var cfg = game_data.get("config", {}).get("adventurers", {})
 	adventurer_id_counter += 1
 	var adv_id = "adv_gen_" + str(adventurer_id_counter)
 
 	# 随机职业
-	var class_data = ADVENTURER_CLASSES[randi() % ADVENTURER_CLASSES.size()]
+	var classes = cfg.get("classes", [])
+	if classes.size() == 0:
+		classes = _get_default_config().get("adventurers", {}).get("classes", [])
+	var class_data = classes[randi() % classes.size()]
 	var adv_class = class_data["class"]
 	var stat_profile = class_data["stat_profile"]
 
 	# 基础属性随公会等级提升
 	# 1级: 5-8, 2级: 8-12, 3级: 12-18
-	var base_min = 5 + (guild_level - 1) * 3
-	var base_max = 8 + (guild_level - 1) * 4
+	var base_cfg = cfg.get("base_stat", {})
+	var base_min = int(base_cfg.get("min_base", 5)) + (guild_level - 1) * int(base_cfg.get("min_per_level", 3))
+	var base_max = int(base_cfg.get("max_base", 8)) + (guild_level - 1) * int(base_cfg.get("max_per_level", 4))
 
 	var base_attack = randi_range(base_min, base_max)
 	var base_defense = randi_range(base_min, base_max)
@@ -847,21 +965,25 @@ func generate_recruitable_adventurer(guild_level: int) -> Dictionary:
 
 	# 费用基于总属性
 	var total_stats = attack + defense + speed
-	var base_cost = total_stats * 10
-	var cost_variance = randi_range(-50, 100)
+	var cost_cfg = cfg.get("cost", {})
+	var base_cost = total_stats * int(cost_cfg.get("base_multiplier", 10))
+	var cost_variance = randi_range(int(cost_cfg.get("variance_min", -50)), int(cost_cfg.get("variance_max", 100)))
 	var coin_cost = base_cost + cost_variance
 
 	var recruitment_cost = {"能量硬币": coin_cost}
 
 	# 高等级冒险家需要额外资源
-	if guild_level >= 2:
-		recruitment_cost["木材"] = total_stats / 2 + randi_range(0, 10)
-	if guild_level >= 3:
-		recruitment_cost["石料"] = total_stats / 3 + randi_range(0, 5)
+	if guild_level >= int(cost_cfg.get("wood_level", 2)):
+		recruitment_cost["木材"] = total_stats / int(cost_cfg.get("wood_divisor", 2)) + randi_range(0, int(cost_cfg.get("wood_variance_max", 10)))
+	if guild_level >= int(cost_cfg.get("stone_level", 3)):
+		recruitment_cost["石料"] = total_stats / int(cost_cfg.get("stone_divisor", 3)) + randi_range(0, int(cost_cfg.get("stone_variance_max", 5)))
 
 	# 唯一名字
 	var adv_name = _get_unique_adventurer_name()
-	var faction = FACTIONS[randi() % FACTIONS.size()]
+	var factions = cfg.get("factions", [])
+	if factions.size() == 0:
+		factions = _get_default_config().get("adventurers", {}).get("factions", [])
+	var faction = factions[randi() % factions.size()]
 
 	return {
 		"id": adv_id,
@@ -874,15 +996,19 @@ func generate_recruitable_adventurer(guild_level: int) -> Dictionary:
 
 ## 获取唯一的冒险家名字
 func _get_unique_adventurer_name() -> String:
+	var cfg = game_data.get("config", {}).get("adventurers", {})
+	var name_pool = cfg.get("names", [])
+	if name_pool.size() == 0:
+		name_pool = _get_default_config().get("adventurers", {}).get("names", [])
 	var available_names = []
-	for adv_name in ADVENTURER_NAMES:
+	for adv_name in name_pool:
 		if adv_name not in used_names:
 			available_names.append(adv_name)
 
 	if available_names.is_empty():
 		# 所有名字用完，重置
 		used_names.clear()
-		available_names = ADVENTURER_NAMES.duplicate()
+		available_names = name_pool.duplicate()
 
 	var chosen_name = available_names[randi() % available_names.size()]
 	used_names.append(chosen_name)
@@ -891,12 +1017,20 @@ func _get_unique_adventurer_name() -> String:
 ## 重新生成可招募冒险家列表
 func regenerate_recruitable_adventurers(guild_level: int) -> void:
 	var guild = get_guild()
+	var cfg = game_data.get("config", {}).get("adventurers", {})
+	var guild_cfg = game_data.get("config", {}).get("guild", {})
 
 	# 清空当前可招募列表
 	guild["recruitable_adventurers"] = []
 
 	# 根据公会等级生成2-4个冒险家
-	var count = 2 + min(guild_level - 1, 2) # 1级:2个, 2级:3个, 3级+:4个
+	var count_cfg = cfg.get("recruitable_count", {})
+	var base = int(count_cfg.get("base", 2))
+	var extra_per_level = int(count_cfg.get("extra_per_level", 1))
+	var max_extra = int(count_cfg.get("max_extra", 2))
+	var count = base + min((guild_level - 1) * extra_per_level, max_extra)
+	var cap = int(guild_cfg.get("recruitable_cap", count))
+	count = min(count, cap)
 
 	for i in range(count):
 		var adv = generate_recruitable_adventurer(guild_level)
@@ -918,20 +1052,29 @@ func upgrade_guild() -> bool:
 
 	# 更新协会名称
 	var level = guild["level"]
-	match level:
-		2: guild["name"] = "中级协会"
-		3: guild["name"] = "高级协会"
-		_: guild["name"] = "Lv." + str(level) + " 协会"
+	var guild_cfg = game_data.get("config", {}).get("guild", {})
+	var levels_cfg = guild_cfg.get("levels", {})
+	var level_entry = levels_cfg.get(str(level), {})
+	if not level_entry.is_empty():
+		guild["name"] = level_entry.get("name", "Lv." + str(level) + " 协会")
+	else:
+		match level:
+			2: guild["name"] = "中级协会"
+			3: guild["name"] = "高级协会"
+			_: guild["name"] = "Lv." + str(level) + " 协会"
 
 	# 更新升级费用（每级递增）
-	var base_coin = 1000
-	var base_wood = 50
-	var base_stone = 30
-	guild["upgrade_cost"] = {
-		"能量硬币": base_coin * level,
-		"木材": base_wood * level,
-		"石料": base_stone * level
-	}
+	if not level_entry.is_empty() and level_entry.has("upgrade_cost"):
+		guild["upgrade_cost"] = level_entry.get("upgrade_cost", {})
+	else:
+		var base_coin = 1000
+		var base_wood = 50
+		var base_stone = 30
+		guild["upgrade_cost"] = {
+			"能量硬币": base_coin * level,
+			"木材": base_wood * level,
+			"石料": base_stone * level
+		}
 
 	# 刷新可招募冒险家（属性更好）
 	regenerate_recruitable_adventurers(level)
