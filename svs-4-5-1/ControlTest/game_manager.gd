@@ -20,10 +20,40 @@ const BUILTIN_SAVE_PATH: String = "res://data/game_save.json"
 const EXTERNAL_SAVE_RELATIVE_PATH: String = "data/game_save.json"
 const AUTO_SAVE_INTERVAL: float = 10.0  # 秒
 
+# 任务刷新系统常量
+const MIN_AVAILABLE_TASKS: int = 3
+const MAX_AVAILABLE_TASKS: int = 5
+const TASK_ID_PREFIX: String = "task_"
+
+# 冒险家生成系统常量
+const ADVENTURER_CLASSES = [
+	{"class": "剑士", "stat_profile": {"攻击": 1.2, "防御": 1.0, "速度": 0.8}},
+	{"class": "弓箭手", "stat_profile": {"攻击": 1.0, "防御": 0.6, "速度": 1.4}},
+	{"class": "法师", "stat_profile": {"攻击": 1.5, "防御": 0.5, "速度": 0.8}},
+	{"class": "盾卫", "stat_profile": {"攻击": 0.7, "防御": 1.5, "速度": 0.6}},
+	{"class": "刺客", "stat_profile": {"攻击": 1.3, "防御": 0.6, "速度": 1.5}},
+	{"class": "游侠", "stat_profile": {"攻击": 1.0, "防御": 0.9, "速度": 1.2}}
+]
+
+const ADVENTURER_NAMES = [
+	"艾丽娅", "莱恩", "卡尔", "索菲娅", "泰勒", "玛莎",
+	"杰克", "罗莎", "雷蒙德", "伊莎贝拉", "维克多", "娜塔莉",
+	"亚历山大", "凯瑟琳", "塞巴斯蒂安", "奥利维亚"
+]
+
+const FACTIONS = ["帝国", "联邦", "独立", "中立"]
+
 # ========== 游戏数据 ==========
 var game_data: Dictionary = {}
 var save_timer: float = 0.0
 var active_save_path: String = ""
+
+# 任务刷新系统变量
+var task_id_counter: int = 1000  # 生成任务的ID计数器
+
+# 冒险家生成系统变量
+var adventurer_id_counter: int = 100
+var used_names: Array = []
 
 # ========== 生命周期 ==========
 
@@ -92,6 +122,10 @@ func load_game() -> void:
 
 	game_data = json.get_data()
 	print("✅ 存档加载成功")
+
+	# 执行迁移逻辑
+	_migrate_save_data()
+
 	game_loaded.emit()
 
 ## 保存游戏存档
@@ -99,8 +133,11 @@ func save_game() -> void:
 	ensure_external_save_dir()
 	var save_path = get_external_save_path()
 
-	# 更新保存时间
+	# 更新保存时间和计数器
 	game_data["save_time"] = Time.get_datetime_string_from_system()
+	game_data["task_id_counter"] = task_id_counter
+	game_data["adventurer_id_counter"] = adventurer_id_counter
+	game_data["used_names"] = used_names
 
 	var json_string = JSON.stringify(game_data, "\t")
 	var file = FileAccess.open(save_path, FileAccess.WRITE)
@@ -143,6 +180,78 @@ func import_save(import_path: String) -> bool:
 	print("📥 存档已导入")
 	game_loaded.emit()
 	return true
+
+## 迁移存档数据（处理旧版本存档）
+func _migrate_save_data() -> void:
+	# 迁移1: 添加玩家冒险家（如果缺失）
+	var has_player = false
+	for adv in get_all_adventurers():
+		if adv.get("is_player", false):
+			has_player = true
+			break
+
+	if not has_player:
+		print("📋 迁移: 添加玩家冒险家")
+		var guild_level = get_guild_level()
+		var base_stat = 5 + (guild_level - 1) * 2
+
+		var player_adv = {
+			"id": "player",
+			"name": "玩家",
+			"faction": "协会",
+			"class": "会长",
+			"stats": {"攻击": base_stat, "防御": base_stat, "速度": base_stat},
+			"status": "待命",
+			"current_task_id": null,
+			"is_player": true
+		}
+		game_data["adventurers"].insert(0, player_adv)
+
+	# 迁移2: 初始化任务计数器
+	if not game_data.has("task_id_counter"):
+		var max_id = 1000
+		for task in get_all_tasks():
+			var task_id = task.get("id", "")
+			if task_id.begins_with("task_"):
+				var id_num = int(task_id.replace("task_", ""))
+				max_id = max(max_id, id_num)
+		game_data["task_id_counter"] = max_id
+		task_id_counter = max_id
+	else:
+		task_id_counter = game_data.get("task_id_counter", 1000)
+
+	# 迁移3: 确保任务池健康
+	maintain_task_pool()
+
+	# 迁移4: 初始化冒险家计数器
+	if not game_data.has("adventurer_id_counter"):
+		var max_id = 100
+		for adv in get_all_adventurers():
+			var adv_id = adv.get("id", "")
+			if adv_id.begins_with("adv_gen_"):
+				var id_num = int(adv_id.replace("adv_gen_", ""))
+				max_id = max(max_id, id_num)
+		game_data["adventurer_id_counter"] = max_id
+		adventurer_id_counter = max_id
+	else:
+		adventurer_id_counter = game_data.get("adventurer_id_counter", 100)
+
+	# 迁移5: 初始化已用名字
+	if not game_data.has("used_names"):
+		game_data["used_names"] = []
+	used_names = game_data.get("used_names", [])
+
+	# 迁移6: 如果可招募冒险家是旧的硬编码数据，重新生成
+	var recruitables = get_recruitable_adventurers()
+	var has_generated = false
+	for adv in recruitables:
+		if adv.get("id", "").begins_with("adv_gen_"):
+			has_generated = true
+			break
+
+	if not has_generated and recruitables.size() > 0:
+		print("📋 迁移: 重新生成可招募冒险家")
+		regenerate_recruitable_adventurers(get_guild_level())
 
 ## 创建默认游戏数据
 func _create_default_game_data() -> void:
@@ -204,7 +313,18 @@ func _create_default_game_data() -> void:
 			}
 		],
 
-		"adventurers": [],
+		"adventurers": [
+			{
+				"id": "player",
+				"name": "玩家",
+				"faction": "协会",
+				"class": "会长",
+				"stats": {"攻击": 5, "防御": 5, "速度": 5},
+				"status": "待命",
+				"current_task_id": null,
+				"is_player": true
+			}
+		],
 
 		"guild": {
 			"level": 1,
@@ -394,6 +514,9 @@ func complete_task(task_id: String) -> void:
 	task_completed.emit(task_id, rewards)
 	print("🎉 任务完成: ", task.get("name"), " 奖励: ", rewards)
 
+	# 立即刷新任务池
+	maintain_task_pool()
+
 ## 解析时长字符串为秒数
 func _parse_duration_to_seconds(duration_str: String) -> float:
 	if duration_str.ends_with("分钟"):
@@ -403,6 +526,134 @@ func _parse_duration_to_seconds(duration_str: String) -> float:
 		var num_str = duration_str.replace("秒", "").strip_edges()
 		return float(num_str)
 	return 60.0  # 默认1分钟
+
+## 生成新任务（基于公会等级）
+func generate_new_task(guild_level: int) -> Dictionary:
+	task_id_counter += 1
+	var task_id = TASK_ID_PREFIX + str(task_id_counter)
+
+	# 难度等级基于公会等级
+	var difficulty_tier = _get_difficulty_tier(guild_level)
+	var difficulty_name = _get_difficulty_name(difficulty_tier)
+
+	# 随机任务类型和势力
+	var task_types = ["护送", "收集", "战斗", "谈判", "救援", "探索"]
+	var factions = ["帝国", "联邦", "独立", "中立"]
+
+	var task_type = task_types[randi() % task_types.size()]
+	var faction = factions[randi() % factions.size()]
+
+	# 奖励基于难度
+	var base_coins = 50 * difficulty_tier
+	var coin_variance = randi_range(-20, 50)
+	var coins = base_coins + coin_variance
+
+	var rewards = {"能量硬币": coins}
+
+	# 难度2+添加额外资源奖励
+	if difficulty_tier >= 2:
+		var resources = ["木材", "石料", "铁矿"]
+		var res_type = resources[randi() % resources.size()]
+		rewards[res_type] = 5 * difficulty_tier + randi_range(0, 10)
+
+	# 时长随难度增加
+	var duration_minutes = difficulty_tier + randi_range(0, 2)
+
+	# 生成任务名称
+	var task_name = _generate_task_name(task_type, faction, difficulty_tier)
+
+	return {
+		"id": task_id,
+		"name": task_name,
+		"faction": faction,
+		"type": task_type,
+		"difficulty": difficulty_name,
+		"rewards": rewards,
+		"duration": str(duration_minutes) + "分钟",
+		"status": "可接取",
+		"assigned_adventurer": null,
+		"start_time": null,
+		"remaining_seconds": duration_minutes * 60
+	}
+
+## 获取难度等级
+func _get_difficulty_tier(guild_level: int) -> int:
+	# 公会1级: 难度1-2, 公会2级: 难度2-3, ...
+	var min_tier = guild_level
+	var max_tier = guild_level + 1
+	return randi_range(min_tier, max_tier)
+
+## 获取难度名称
+func _get_difficulty_name(tier: int) -> String:
+	match tier:
+		1: return "简单"
+		2: return "中等"
+		3: return "困难"
+		4: return "精英"
+		5: return "传说"
+		_: return "史诗"
+
+## 生成任务名称
+func _generate_task_name(task_type: String, _faction: String, tier: int) -> String:
+	var prefixes = {
+		"护送": ["护送", "保护", "守卫"],
+		"收集": ["采集", "收集", "搜寻"],
+		"战斗": ["剿灭", "讨伐", "消灭"],
+		"谈判": ["外交", "谈判", "调解"],
+		"救援": ["救援", "营救", "紧急救援"],
+		"探索": ["探索", "调查", "侦查"]
+	}
+
+	var targets = ["边境", "矿区", "海盗", "使节", "村民", "遗迹", "商队", "要塞", "森林", "山脉"]
+
+	var prefix_list = prefixes.get(task_type, ["任务"])
+	var prefix = prefix_list[randi() % prefix_list.size()]
+	var target = targets[randi() % targets.size()]
+
+	if tier >= 4:
+		return prefix + "精英" + target
+	elif tier >= 5:
+		return prefix + "传说" + target
+	else:
+		return prefix + target
+
+## 获取可用任务列表
+func get_available_tasks() -> Array:
+	var available = []
+	for task in get_all_tasks():
+		if task.get("status") == "可接取":
+			available.append(task)
+	return available
+
+## 维护任务池（确保3-5个可用任务）
+func maintain_task_pool() -> void:
+	var available_tasks = get_available_tasks()
+	var available_count = available_tasks.size()
+
+	# 移除已完成任务（立即刷新）
+	var tasks = get_all_tasks()
+	var i = tasks.size() - 1
+	while i >= 0:
+		if tasks[i].get("status") == "已完成":
+			tasks.remove_at(i)
+		i -= 1
+
+	# 如果可用任务少于最小值，生成新任务
+	while available_count < MIN_AVAILABLE_TASKS:
+		var new_task = generate_new_task(get_guild_level())
+		tasks.append(new_task)
+		available_count += 1
+
+	# 限制最大可用任务数
+	if available_count > MAX_AVAILABLE_TASKS:
+		var to_remove = available_count - MAX_AVAILABLE_TASKS
+		i = 0
+		while i < tasks.size() and to_remove > 0:
+			if tasks[i].get("status") == "可接取":
+				tasks.remove_at(i)
+				to_remove -= 1
+			else:
+				i += 1
 
 # ========== 冒险家管理 ==========
 
@@ -416,6 +667,28 @@ func get_adventurer(adventurer_id: String) -> Dictionary:
 		if adv.get("id") == adventurer_id:
 			return adv
 	return {}
+
+## 获取玩家冒险家
+func get_player_adventurer() -> Dictionary:
+	for adv in get_all_adventurers():
+		if adv.get("is_player", false):
+			return adv
+	return {}
+
+## 升级玩家属性（随协会等级）
+func upgrade_player_stats(guild_level: int) -> void:
+	var player = get_player_adventurer()
+	if player.is_empty():
+		return
+
+	# 每级增加属性：基础5 + (等级-1)*2
+	var base_stat = 5 + (guild_level - 1) * 2
+	player["stats"] = {
+		"攻击": base_stat,
+		"防御": base_stat,
+		"速度": base_stat
+	}
+	print("📈 玩家属性提升到: ", base_stat)
 
 ## 招募冒险家
 func recruit_adventurer(adventurer_id: String) -> bool:
@@ -456,6 +729,11 @@ func recruit_adventurer(adventurer_id: String) -> bool:
 	}
 	game_data["adventurers"].append(new_adventurer)
 
+	# 生成新的冒险家补充
+	var guild_level = get_guild_level()
+	var new_recruit = generate_recruitable_adventurer(guild_level)
+	recruitable.append(new_recruit)
+
 	adventurer_recruited.emit(adventurer_id)
 	print("✅ 招募成功: ", target_adv.get("name"))
 	return true
@@ -473,6 +751,95 @@ func get_guild_level() -> int:
 ## 获取可招募冒险家列表
 func get_recruitable_adventurers() -> Array:
 	return get_guild().get("recruitable_adventurers", [])
+
+## 生成可招募冒险家
+func generate_recruitable_adventurer(guild_level: int) -> Dictionary:
+	adventurer_id_counter += 1
+	var adv_id = "adv_gen_" + str(adventurer_id_counter)
+
+	# 随机职业
+	var class_data = ADVENTURER_CLASSES[randi() % ADVENTURER_CLASSES.size()]
+	var adv_class = class_data["class"]
+	var stat_profile = class_data["stat_profile"]
+
+	# 基础属性随公会等级提升
+	# 1级: 5-8, 2级: 8-12, 3级: 12-18
+	var base_min = 5 + (guild_level - 1) * 3
+	var base_max = 8 + (guild_level - 1) * 4
+
+	var base_attack = randi_range(base_min, base_max)
+	var base_defense = randi_range(base_min, base_max)
+	var base_speed = randi_range(base_min, base_max)
+
+	# 应用职业系数
+	var attack = int(base_attack * stat_profile["攻击"])
+	var defense = int(base_defense * stat_profile["防御"])
+	var speed = int(base_speed * stat_profile["速度"])
+
+	var stats = {
+		"攻击": attack,
+		"防御": defense,
+		"速度": speed
+	}
+
+	# 费用基于总属性
+	var total_stats = attack + defense + speed
+	var base_cost = total_stats * 10
+	var cost_variance = randi_range(-50, 100)
+	var coin_cost = base_cost + cost_variance
+
+	var recruitment_cost = {"能量硬币": coin_cost}
+
+	# 高等级冒险家需要额外资源
+	if guild_level >= 2:
+		recruitment_cost["木材"] = total_stats / 2 + randi_range(0, 10)
+	if guild_level >= 3:
+		recruitment_cost["石料"] = total_stats / 3 + randi_range(0, 5)
+
+	# 唯一名字
+	var adv_name = _get_unique_adventurer_name()
+	var faction = FACTIONS[randi() % FACTIONS.size()]
+
+	return {
+		"id": adv_id,
+		"name": adv_name,
+		"faction": faction,
+		"class": adv_class,
+		"stats": stats,
+		"recruitment_cost": recruitment_cost
+	}
+
+## 获取唯一的冒险家名字
+func _get_unique_adventurer_name() -> String:
+	var available_names = []
+	for adv_name in ADVENTURER_NAMES:
+		if adv_name not in used_names:
+			available_names.append(adv_name)
+
+	if available_names.is_empty():
+		# 所有名字用完，重置
+		used_names.clear()
+		available_names = ADVENTURER_NAMES.duplicate()
+
+	var chosen_name = available_names[randi() % available_names.size()]
+	used_names.append(chosen_name)
+	return chosen_name
+
+## 重新生成可招募冒险家列表
+func regenerate_recruitable_adventurers(guild_level: int) -> void:
+	var guild = get_guild()
+
+	# 清空当前可招募列表
+	guild["recruitable_adventurers"] = []
+
+	# 根据公会等级生成2-4个冒险家
+	var count = 2 + min(guild_level - 1, 2)  # 1级:2个, 2级:3个, 3级+:4个
+
+	for i in range(count):
+		var adv = generate_recruitable_adventurer(guild_level)
+		guild["recruitable_adventurers"].append(adv)
+
+	print("✨ 生成了 ", count, " 个可招募冒险家 (公会等级 ", guild_level, ")")
 
 ## 升级协会
 func upgrade_guild() -> bool:
@@ -503,17 +870,11 @@ func upgrade_guild() -> bool:
 		"石料": base_stone * level
 	}
 
-	# 可以在这里添加新的可招募冒险家
-	if level == 2:
-		guild["recruitable_adventurers"].append({
-			"id": "adv_003",
-			"name": "卡尔",
-			"faction": "独立",
-			"class": "法师",
-			"stats": {"攻击": 10, "防御": 3, "速度": 6},
-			"recruitment_cost": {"能量硬币": 600, "木材": 20, "石料": 10}
-		})
-		guild["next_level_bonus"] = "解锁传说冒险家"
+	# 刷新可招募冒险家（属性更好）
+	regenerate_recruitable_adventurers(level)
+
+	# 升级玩家属性
+	upgrade_player_stats(level)
 
 	guild_upgraded.emit(level)
 	print("🏰 协会升级到 Lv.", level)

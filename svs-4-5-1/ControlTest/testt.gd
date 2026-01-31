@@ -219,6 +219,12 @@ func _create_adventurer_row(adv_data: Dictionary) -> HBoxContainer:
 	label_name.text = adv_data.get("name", "")
 	label_name.custom_minimum_size = Vector2(200, 0)
 	label_name.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+
+	# 如果是玩家，添加视觉区分
+	if adv_data.get("is_player", false):
+		label_name.text = "[玩家] " + adv_data.get("name", "")
+		label_name.modulate = Color(1.0, 0.8, 0.2)  # 金色
+
 	row.add_child(label_name)
 
 	# 势力
