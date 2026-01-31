@@ -544,17 +544,17 @@ func start_task(task_id: String, adventurer_id: String = "") -> bool:
 	var assigned_adv_id = ""
 	if adventurer_id != "":
 		print("🔍 [GameManager] 尝试分配指定冒险家: ", adventurer_id)
-		var adv = get_adventurer(adventurer_id)
-		if adv.is_empty():
+		var adv_idx = _get_adventurer_index(adventurer_id)
+		if adv_idx == -1:
 			print("❌ 冒险家不存在: ", adventurer_id)
 			return false
-		if adv.get("status") != "待命":
-			print("❌ 冒险家状态不是'待命': ", adv.get("status"))
+		if game_data["adventurers"][adv_idx].get("status") != "待命":
+			print("❌ 冒险家状态不是'待命': ", game_data["adventurers"][adv_idx].get("status"))
 			return false
 		assigned_adv_id = adventurer_id
-		adv["status"] = "执行中"
-		adv["current_task_id"] = task_id
-		print("✅ [GameManager] 冒险家分配成功: ", adv.get("name"), " (", assigned_adv_id, ")")
+		game_data["adventurers"][adv_idx]["status"] = "执行中"
+		game_data["adventurers"][adv_idx]["current_task_id"] = task_id
+		print("✅ [GameManager] 冒险家分配成功: ", game_data["adventurers"][adv_idx].get("name"), " (", assigned_adv_id, ")")
 		adventurer_status_changed.emit(adventurer_id, "执行中")
 	else:
 		# 自动分配第一个可用冒险家
@@ -564,9 +564,13 @@ func start_task(task_id: String, adventurer_id: String = "") -> bool:
 		if available.size() > 0:
 			var adv = available[0]
 			assigned_adv_id = adv.get("id", "")
-			adv["status"] = "执行中"
-			adv["current_task_id"] = task_id
-			print("✅ [GameManager] 自动分配冒险家: ", adv.get("name"), " (", assigned_adv_id, ")")
+			var adv_idx = _get_adventurer_index(assigned_adv_id)
+			if adv_idx == -1:
+				print("❌ [GameManager] 冒险家不存在: ", assigned_adv_id)
+				return false
+			game_data["adventurers"][adv_idx]["status"] = "执行中"
+			game_data["adventurers"][adv_idx]["current_task_id"] = task_id
+			print("✅ [GameManager] 自动分配冒险家: ", game_data["adventurers"][adv_idx].get("name"), " (", assigned_adv_id, ")")
 			adventurer_status_changed.emit(assigned_adv_id, "执行中")
 		else:
 			print("❌ [GameManager] 没有可用冒险家，无法开始任务")
@@ -611,11 +615,17 @@ func complete_task(task_id: String) -> void:
 	# 释放冒险家
 	var adv_id = task.get("assigned_adventurer")
 	if adv_id is String and adv_id != "":
-		var adv = get_adventurer(adv_id)
-		if not adv.is_empty():
-			adv["status"] = "待命"
-			adv["current_task_id"] = null
-			adventurer_status_changed.emit(adv_id, "待命")
+		var adv_idx = _get_adventurer_index(adv_id)
+		if adv_idx != -1:
+			var adv_data = game_data["adventurers"][adv_idx]
+			# 一次性冒险家：任务完成后移除（玩家不移除）
+			if adv_data.get("is_player", false):
+				game_data["adventurers"][adv_idx]["status"] = "待命"
+				game_data["adventurers"][adv_idx]["current_task_id"] = null
+				adventurer_status_changed.emit(adv_id, "待命")
+			else:
+				game_data["adventurers"].remove_at(adv_idx)
+				adventurer_status_changed.emit(adv_id, "移除")
 
 	# 更新任务状态
 	task["status"] = "已完成"
@@ -841,6 +851,14 @@ func get_adventurer(adventurer_id: String) -> Dictionary:
 			return adv
 	return {}
 
+## 获取冒险家索引（用于写回）
+func _get_adventurer_index(adventurer_id: String) -> int:
+	var adventurers = get_all_adventurers()
+	for i in range(adventurers.size()):
+		if adventurers[i].get("id") == adventurer_id:
+			return i
+	return -1
+
 ## 获取玩家冒险家
 func get_player_adventurer() -> Dictionary:
 	for adv in get_all_adventurers():
@@ -856,7 +874,10 @@ func upgrade_player_stats(guild_level: int) -> void:
 
 	# 每级增加属性：基础5 + (等级-1)*2
 	var base_stat = 5 + (guild_level - 1) * 2
-	player["stats"] = {
+	var idx = _get_adventurer_index(player.get("id", ""))
+	if idx == -1:
+		return
+	game_data["adventurers"][idx]["stats"] = {
 		"攻击": base_stat,
 		"防御": base_stat,
 		"速度": base_stat

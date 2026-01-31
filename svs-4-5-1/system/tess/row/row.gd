@@ -106,7 +106,7 @@ func _update_labels() -> void:
 		for res_name in rewards:
 			if reward_text != "":
 				reward_text += " "
-			reward_text += str(rewards[res_name])
+			reward_text += str(res_name) + ":" + str(rewards[res_name])
 		label_reward.text = reward_text
 	else:
 		# 旧格式：字符串
