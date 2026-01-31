@@ -1,0 +1,27 @@
+[gd_scene load_steps=2 format=3 uid="uid://b5drpf02j8iot"]
+
+[ext_resource type="Script" uid="uid://c5k7fxliilkwf" path="res://ControlTest/cover.gd" id="1_xu3k4"]
+
+[node name="Cover" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_xu3k4")
+
+[node name="Button" type="Button" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.40600002
+anchor_top = 0.45800003
+anchor_right = 0.59400004
+anchor_bottom = 0.54200006
+offset_left = 0.3199463
+offset_top = 0.23999023
+offset_right = -0.32006836
+offset_bottom = -0.24005127
+grow_horizontal = 2
+grow_vertical = 2
+text = "开始游戏"
