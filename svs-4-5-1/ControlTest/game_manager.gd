@@ -433,34 +433,50 @@ func get_available_adventurers() -> Array:
 
 ## 开始任务
 func start_task(task_id: String, adventurer_id: String = "") -> bool:
+	print("🔍 [GameManager] start_task 被调用: task_id=", task_id, ", adventurer_id=", adventurer_id if adventurer_id != "" else "(空，将自动分配)")
+
 	if not can_accept_new_task():
 		print("❌ 无法接受更多任务")
 		return false
 
 	var task = get_task(task_id)
-	if task.is_empty() or task.get("status") != "可接取":
+	if task.is_empty():
+		print("❌ 任务不存在: ", task_id)
+		return false
+	if task.get("status") != "可接取":
+		print("❌ 任务状态不是'可接取': ", task.get("status"))
 		return false
 
 	# 如果有冒险家，分配冒险家
 	var assigned_adv_id = ""
 	if adventurer_id != "":
+		print("🔍 [GameManager] 尝试分配指定冒险家: ", adventurer_id)
 		var adv = get_adventurer(adventurer_id)
-		if adv.is_empty() or adv.get("status") != "待命":
-			print("❌ 冒险家不可用")
+		if adv.is_empty():
+			print("❌ 冒险家不存在: ", adventurer_id)
+			return false
+		if adv.get("status") != "待命":
+			print("❌ 冒险家状态不是'待命': ", adv.get("status"))
 			return false
 		assigned_adv_id = adventurer_id
 		adv["status"] = "执行中"
 		adv["current_task_id"] = task_id
+		print("✅ [GameManager] 冒险家分配成功: ", adv.get("name"), " (", assigned_adv_id, ")")
 		adventurer_status_changed.emit(adventurer_id, "执行中")
 	else:
 		# 自动分配第一个可用冒险家
+		print("🔍 [GameManager] 自动分配冒险家...")
 		var available = get_available_adventurers()
+		print("🔍 [GameManager] 可用冒险家数量: ", available.size())
 		if available.size() > 0:
 			var adv = available[0]
 			assigned_adv_id = adv.get("id", "")
 			adv["status"] = "执行中"
 			adv["current_task_id"] = task_id
+			print("✅ [GameManager] 自动分配冒险家: ", adv.get("name"), " (", assigned_adv_id, ")")
 			adventurer_status_changed.emit(assigned_adv_id, "执行中")
+		else:
+			print("⚠️ [GameManager] 没有可用冒险家，任务将无人执行")
 
 	# 更新任务状态
 	task["status"] = "进行中"
@@ -470,9 +486,10 @@ func start_task(task_id: String, adventurer_id: String = "") -> bool:
 	# 解析时长
 	var duration_str = task.get("duration", "1分钟")
 	task["remaining_seconds"] = _parse_duration_to_seconds(duration_str)
+	print("🔍 [GameManager] 任务时长: ", duration_str, " (", task["remaining_seconds"], " 秒)")
 
 	task_started.emit(task_id, assigned_adv_id)
-	print("✅ 任务开始: ", task.get("name"), " 冒险家: ", assigned_adv_id)
+	print("✅ 任务开始: ", task.get("name"), " 冒险家: ", assigned_adv_id if assigned_adv_id != "" else "(无)")
 	return true
 
 ## 更新运行中的任务
@@ -626,35 +643,40 @@ func _generate_task_duration(difficulty_tier: int) -> String:
 	# 根据难度等级决定时长范围
 	match difficulty_tier:
 		1:
-			# 简单任务: 5-30秒
-			var seconds = randi_range(5, 30)
-			if seconds < 10:
-				# 5-9秒 → 显示毫秒
+			# 简单任务: 1-5秒
+			var seconds = randi_range(1, 5)
+			if seconds < 3:
+				# 1-2秒 → 显示毫秒（更容易看到倒计时）
 				return str(seconds * 1000) + "毫秒"
 			else:
 				return str(seconds) + "秒"
 
 		2:
-			# 中等任务: 15-60秒
-			var seconds = randi_range(15, 60)
+			# 中等任务: 5-15秒
+			var seconds = randi_range(5, 15)
+			return str(seconds) + "秒"
+
+		3:
+			# 困难任务: 15-30秒
+			var seconds = randi_range(15, 30)
+			return str(seconds) + "秒"
+
+		4:
+			# 精英任务: 30-60秒
+			var seconds = randi_range(30, 60)
 			if seconds < 60:
 				return str(seconds) + "秒"
 			else:
 				return "1分钟"
 
-		3:
-			# 困难任务: 1-3分钟
-			var minutes = randi_range(1, 3)
-			return str(minutes) + "分钟"
-
-		4, 5:
-			# 精英/传说任务: 2-5分钟
-			var minutes = randi_range(2, 5)
+		5:
+			# 传说任务: 1-2分钟
+			var minutes = randi_range(1, 2)
 			return str(minutes) + "分钟"
 
 		_:
-			# 史诗任务: 5-10分钟
-			var minutes = randi_range(5, 10)
+			# 史诗任务: 2-5分钟
+			var minutes = randi_range(2, 5)
 			return str(minutes) + "分钟"
 
 ## 获取可用任务列表

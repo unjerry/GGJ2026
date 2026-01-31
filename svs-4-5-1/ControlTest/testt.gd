@@ -90,6 +90,8 @@ func refresh_task_panel() -> void:
 	print("✅ 任务面板刷新: ", task_rows.size(), " 个任务")
 
 func _on_task_accept_requested(task_id: String, adventurer_id: String) -> void:
+	print("🔍 [testt] 收到 task_accepted 信号: task_id=", task_id, ", adventurer_id=", adventurer_id)
+
 	# 检查是否可以接受任务
 	if not game_manager.can_accept_new_task():
 		print("❌ 无法接受更多任务！需要招募更多冒险家。")
@@ -97,7 +99,12 @@ func _on_task_accept_requested(task_id: String, adventurer_id: String) -> void:
 		return
 
 	# 开始任务（传入指定的冒险家ID，如果为空则自动分配）
-	game_manager.start_task(task_id, adventurer_id)
+	print("🔍 [testt] 调用 game_manager.start_task(", task_id, ", ", adventurer_id, ")")
+	var success = game_manager.start_task(task_id, adventurer_id)
+	if success:
+		print("✅ [testt] 任务开始成功")
+	else:
+		print("❌ [testt] 任务开始失败")
 
 # ========== 资源面板 ==========
 
