@@ -18,7 +18,7 @@ signal game_loaded()
 # ========== 常量 ==========
 const BUILTIN_SAVE_PATH: String = "res://data/game_save.json"
 const EXTERNAL_SAVE_RELATIVE_PATH: String = "data/game_save.json"
-const AUTO_SAVE_INTERVAL: float = 10.0  # 秒
+const AUTO_SAVE_INTERVAL: float = 10.0 # 秒
 
 # 任务刷新系统常量
 const MIN_AVAILABLE_TASKS: int = 3
@@ -49,7 +49,7 @@ var save_timer: float = 0.0
 var active_save_path: String = ""
 
 # 任务刷新系统变量
-var task_id_counter: int = 1000  # 生成任务的ID计数器
+var task_id_counter: int = 1000 # 生成任务的ID计数器
 
 # 冒险家生成系统变量
 var adventurer_id_counter: int = 100
@@ -519,13 +519,16 @@ func complete_task(task_id: String) -> void:
 
 ## 解析时长字符串为秒数
 func _parse_duration_to_seconds(duration_str: String) -> float:
-	if duration_str.ends_with("分钟"):
-		var num_str = duration_str.replace("分钟", "").strip_edges()
-		return float(num_str) * 60.0
+	if duration_str.ends_with("毫秒"):
+		var num_str = duration_str.replace("毫秒", "").strip_edges()
+		return float(num_str) / 1000.0  # 毫秒转秒
 	elif duration_str.ends_with("秒"):
 		var num_str = duration_str.replace("秒", "").strip_edges()
 		return float(num_str)
-	return 60.0  # 默认1分钟
+	elif duration_str.ends_with("分钟"):
+		var num_str = duration_str.replace("分钟", "").strip_edges()
+		return float(num_str) * 60.0
+	return 60.0 # 默认1分钟
 
 ## 生成新任务（基于公会等级）
 func generate_new_task(guild_level: int) -> Dictionary:
@@ -556,8 +559,9 @@ func generate_new_task(guild_level: int) -> Dictionary:
 		var res_type = resources[randi() % resources.size()]
 		rewards[res_type] = 5 * difficulty_tier + randi_range(0, 10)
 
-	# 时长随难度增加
-	var duration_minutes = difficulty_tier + randi_range(0, 2)
+	# 时长随难度增加，支持毫秒/秒/分钟
+	var duration_str = _generate_task_duration(difficulty_tier)
+	var duration_seconds = _parse_duration_to_seconds(duration_str)
 
 	# 生成任务名称
 	var task_name = _generate_task_name(task_type, faction, difficulty_tier)
@@ -569,11 +573,11 @@ func generate_new_task(guild_level: int) -> Dictionary:
 		"type": task_type,
 		"difficulty": difficulty_name,
 		"rewards": rewards,
-		"duration": str(duration_minutes) + "分钟",
+		"duration": duration_str,
 		"status": "可接取",
 		"assigned_adventurer": null,
 		"start_time": null,
-		"remaining_seconds": duration_minutes * 60
+		"remaining_seconds": duration_seconds
 	}
 
 ## 获取难度等级
@@ -616,6 +620,42 @@ func _generate_task_name(task_type: String, _faction: String, tier: int) -> Stri
 		return prefix + "传说" + target
 	else:
 		return prefix + target
+
+## 生成任务时长（基于难度等级）
+func _generate_task_duration(difficulty_tier: int) -> String:
+	# 根据难度等级决定时长范围
+	match difficulty_tier:
+		1:
+			# 简单任务: 5-30秒
+			var seconds = randi_range(5, 30)
+			if seconds < 10:
+				# 5-9秒 → 显示毫秒
+				return str(seconds * 1000) + "毫秒"
+			else:
+				return str(seconds) + "秒"
+
+		2:
+			# 中等任务: 15-60秒
+			var seconds = randi_range(15, 60)
+			if seconds < 60:
+				return str(seconds) + "秒"
+			else:
+				return "1分钟"
+
+		3:
+			# 困难任务: 1-3分钟
+			var minutes = randi_range(1, 3)
+			return str(minutes) + "分钟"
+
+		4, 5:
+			# 精英/传说任务: 2-5分钟
+			var minutes = randi_range(2, 5)
+			return str(minutes) + "分钟"
+
+		_:
+			# 史诗任务: 5-10分钟
+			var minutes = randi_range(5, 10)
+			return str(minutes) + "分钟"
 
 ## 获取可用任务列表
 func get_available_tasks() -> Array:
@@ -833,7 +873,7 @@ func regenerate_recruitable_adventurers(guild_level: int) -> void:
 	guild["recruitable_adventurers"] = []
 
 	# 根据公会等级生成2-4个冒险家
-	var count = 2 + min(guild_level - 1, 2)  # 1级:2个, 2级:3个, 3级+:4个
+	var count = 2 + min(guild_level - 1, 2) # 1级:2个, 2级:3个, 3级+:4个
 
 	for i in range(count):
 		var adv = generate_recruitable_adventurer(guild_level)

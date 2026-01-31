@@ -89,15 +89,15 @@ func refresh_task_panel() -> void:
 
 	print("✅ 任务面板刷新: ", task_rows.size(), " 个任务")
 
-func _on_task_accept_requested(task_id: String) -> void:
+func _on_task_accept_requested(task_id: String, adventurer_id: String) -> void:
 	# 检查是否可以接受任务
 	if not game_manager.can_accept_new_task():
 		print("❌ 无法接受更多任务！需要招募更多冒险家。")
 		print("   当前任务: ", game_manager.get_running_tasks_count(), "/", game_manager.get_max_concurrent_tasks())
 		return
 
-	# 开始任务（自动分配冒险家或无冒险家）
-	game_manager.start_task(task_id)
+	# 开始任务（传入指定的冒险家ID，如果为空则自动分配）
+	game_manager.start_task(task_id, adventurer_id)
 
 # ========== 资源面板 ==========
 
