@@ -1,7 +1,22 @@
-[gd_scene load_steps=3 format=3 uid="uid://b4nxfyhc5akri"]
+[gd_scene load_steps=5 format=3 uid="uid://b4nxfyhc5akri"]
 
 [ext_resource type="Theme" uid="uid://babllk7qflvhe" path="res://ControlTest/testt.tres" id="1_a1fkk"]
 [ext_resource type="Script" uid="uid://bb0a2k1y6kuwu" path="res://ControlTest/testt.gd" id="1_testt"]
+[ext_resource type="Texture2D" uid="uid://cn5p7oigoxgxj" path="res://assets/mask1.png" id="3_bnb0s"]
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_ylk27"]
+_surfaces = [{
+"2d": true,
+"aabb": AABB(-640, -360, 0, 1280, 720, 0),
+"attribute_data": PackedByteArray(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 128, 63, 0, 0, 128, 63, 0, 0, 128, 63, 0, 0, 128, 63, 0, 0, 0, 0),
+"format": 34393296913,
+"index_count": 6,
+"index_data": PackedByteArray(0, 0, 3, 0, 2, 0, 2, 0, 1, 0, 0, 0),
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 4,
+"vertex_data": PackedByteArray(0, 0, 32, 196, 0, 0, 180, 195, 0, 0, 32, 196, 0, 0, 180, 67, 0, 0, 32, 68, 0, 0, 180, 67, 0, 0, 32, 68, 0, 0, 180, 195)
+}]
 
 [node name="Control" type="Control"]
 layout_mode = 3
@@ -16,6 +31,11 @@ grow_horizontal = 2
 grow_vertical = 2
 theme = ExtResource("1_a1fkk")
 script = ExtResource("1_testt")
+
+[node name="Sprite2D" type="MeshInstance2D" parent="."]
+position = Vector2(590, 310)
+mesh = SubResource("ArrayMesh_ylk27")
+texture = ExtResource("3_bnb0s")
 
 [node name="Control" type="Control" parent="."]
 layout_mode = 1
