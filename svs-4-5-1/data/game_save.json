@@ -82,12 +82,12 @@
 			],
 			"cost": {
 				"base_multiplier": 10.0,
-				"stone_divisor": 3.0,
+				"stone_divisor": 300.0,
 				"stone_level": 3.0,
 				"stone_variance_max": 5.0,
 				"variance_max": 100.0,
 				"variance_min": -50.0,
-				"wood_divisor": 2.0,
+				"wood_divisor": 200.0,
 				"wood_level": 2.0,
 				"wood_variance_max": 10.0
 			},
@@ -374,8 +374,8 @@
 					"coin_base": 300.0,
 					"coin_variance_max": 50.0,
 					"coin_variance_min": -20.0,
-					"duration_max_s": 15.0,
-					"duration_min_s": 5.0,
+					"duration_max_s": 5.0,
+					"duration_min_s": 1.0,
 					"name": "中等",
 					"tier": 2.0
 				},
@@ -383,8 +383,8 @@
 					"coin_base": 350.0,
 					"coin_variance_max": 50.0,
 					"coin_variance_min": -20.0,
-					"duration_max_s": 30.0,
-					"duration_min_s": 15.0,
+					"duration_max_s": 5.0,
+					"duration_min_s": 1.0,
 					"name": "困难",
 					"tier": 3.0
 				},
@@ -392,8 +392,8 @@
 					"coin_base": 400.0,
 					"coin_variance_max": 50.0,
 					"coin_variance_min": -20.0,
-					"duration_max_s": 60.0,
-					"duration_min_s": 30.0,
+					"duration_max_s": 5.0,
+					"duration_min_s": 1.0,
 					"name": "精英",
 					"tier": 4.0
 				},
@@ -401,8 +401,8 @@
 					"coin_base": 450.0,
 					"coin_variance_max": 50.0,
 					"coin_variance_min": -20.0,
-					"duration_max_s": 120.0,
-					"duration_min_s": 60.0,
+					"duration_max_s": 5.0,
+					"duration_min_s": 1.0,
 					"name": "传说",
 					"tier": 5.0
 				},
@@ -410,8 +410,8 @@
 					"coin_base": 500.0,
 					"coin_variance_max": 50.0,
 					"coin_variance_min": -20.0,
-					"duration_max_s": 300.0,
-					"duration_min_s": 120.0,
+					"duration_max_s": 5.0,
+					"duration_min_s": 1.0,
 					"name": "史诗",
 					"tier": 6.0
 				}
